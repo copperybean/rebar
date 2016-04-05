@@ -1,0 +1,44 @@
+{namespace baidu.base.tplSemanticUI}
+
+/**
+ * semantic ui的对话框
+ * @param viewId
+ * @param hideCloseIcon
+ */
+{template .dialog}
+<div class="ui small modal transition hidden">
+    {if not $hideCloseIcon}
+        <i class="close icon"></i>
+    {/if}
+    <div class="header">
+    </div>
+    <div class="content">
+    </div>
+    <div class="actions">
+        <div class="ui button negative" id="{$viewId}{baidu.base.suidc.ID_CANCEL_BTN}">取消</div>
+        <div class="ui button positive" id="{$viewId}{baidu.base.suidc.ID_OK_BTN}">确定</div>
+    </div>
+</div>
+{/template}
+
+/**
+ * @param viewId
+ * @param numShow
+ */
+{template .pagination}
+<div class="ui pagination menu">
+  <a class="icon item" id="{$viewId}{baidu.base.pvdc.ID_PRE_PAGE}">
+      上一页
+  </a>
+  <a class="active item" id="{$viewId}{baidu.base.pvdc.ID_FIRST_PAGE}">1</a>
+  <div class="disabled item" id="{$viewId}{baidu.base.spvdc.ID_START_GAP}">...</div>
+  {for $i in range($numShow)}
+  <a class="item" {baidu.base.pvdc.ATTR_PAGE_INDEX}="{$i}">{$i+1}</a>
+  {/for}
+  <div class="disabled item" id="{$viewId}{baidu.base.spvdc.ID_END_GAP}">...</div>
+  <a class="item" id="{$viewId}{baidu.base.pvdc.ID_LAST_PAGE}">1</a>
+  <a class="icon item" id="{$viewId}{baidu.base.pvdc.ID_NEXT_PAGE}">
+      下一页
+  </a>
+</div>
+{/template}
