@@ -91,8 +91,6 @@ js_library(
         'util.js',
         'views/inputwrapper.js',
         'views/paginationview.js',
-        'views/semanticsearchwrapper.js',
-        'views/semanticsearchwrapper.soy',
     ],
     deps = [
         './img:jsbase_resource'
