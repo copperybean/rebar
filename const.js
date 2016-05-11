@@ -75,3 +75,12 @@ baidu.base.Const.AnimationEvents = {
     AnimationEnd: baidu.base.Const.getAniNamePrefix_() + 'AnimationEnd'
 };
 
+/**
+ * 有些其他插件对应的js(比如bootstrap以及semanticui对应的插件)不是会被全部包含的
+ * 但是他们会引用公共的soy, 这样会导致对于常量的引用出现以来问题, 所以干脆定义在这里
+ * @enum {string}
+ */
+baidu.base.Const.DomConst = {
+    SEMANTICUI_SEARCHINPUT_ITEMS: 'suisinput'
+};
+

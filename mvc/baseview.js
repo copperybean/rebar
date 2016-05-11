@@ -13,6 +13,7 @@ goog.require('baidu.base.Stateful');
 goog.require('baidu.base.util');
 
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.IdGenerator');
 goog.require('goog.ui.Tooltip');
@@ -56,6 +57,12 @@ baidu.base.BaseView = function (optRenderDomWithIdPrefix) {
      * @private
      */
     this.tooltips_ = [];
+
+    /**
+     * @type {Object.<string, baidu.base.BaseInput>}
+     * @private
+     */
+    this._inputsMap = {};
 
     /**
      * 记录subscribe函数返回的key
@@ -493,26 +500,101 @@ baidu.base.BaseView.prototype.bindInputCheck = function (optElement) {
 };
 
 /**
+ * 删除某个element下的所有错误提示
+ * @protected
+ */
+baidu.base.BaseView.prototype.removeAllError = function () {
+    var selector = baidu.base.util.attrSelector(
+        this.getDomStr(baidu.base.DomConst.AttrCheckerReg));
+    var elList = this.getElement().querySelectorAll(selector);
+    goog.array.forEach(elList, function (el) {
+        baidu.base.util.removeError(el);
+    }, this);
+};
+
+/**
  * @param {Function} acceptModel The model constructor.
  * @param {Element=} optElement The optional element,
  *     default is current element.
  * @return {baidu.base.BaseModel}
  * @protected
+ * @deprecated 请使用buildFormModel
  */
 baidu.base.BaseView.prototype.buildJQueryFormData = function (
     acceptModel, optElement) {
-    if (!jQuery) {
-        return null;
-    }
-    var jsonObj = {};
-    var data = $(optElement || this.getElement())
-        .find(':input').serializeArray();
-    goog.array.forEach(data, function (item) {
-        jsonObj[item.name] = item.value;
-    });
+    var jsonObj = this.buildFormData(null, optElement);
     var model = new acceptModel();
     model.initWitJson(jsonObj);
     return model;
+};
+
+/**
+ * To build a model from from
+ *
+ * @param {Function} acceptModel The model constructor.
+ * @param {baidu.base.BaseModel=} optInitModel The optional init model.
+ * @param {Element=} optElement The optional element,
+ *     default is current element.
+ * @return {baidu.base.BaseModel}
+ * @protected
+ */
+baidu.base.BaseView.prototype.buildFormModel = function (
+    acceptModel, optInitModel, optElement) {
+    var initObj = null;
+    if (optInitModel) {
+        initObj = optInitModel.toJson();
+    }
+    var jsonObj = this.buildFormData(initObj, optElement);
+    var model = new acceptModel();
+    model.initWitJson(jsonObj);
+    return model;
+};
+
+/**
+ * To build data from form
+ *
+ * @param {Object=} optInitObj The optional json object.
+ * @param {Element=} optElement The optional element,
+ *     default is current element.
+ * @return {Object}
+ * @protected
+ */
+baidu.base.BaseView.prototype.buildFormData = function (optInitObj, optElement) {
+    var jsonObj = optInitObj || {};
+    var elContent = optElement || this.getElement();
+    var appendItem = function (name, val) {
+        var nameSplits = name.split('.');
+        var obj = jsonObj;
+        for (var i = 0; i < nameSplits.length - 1; i++) {
+            if (!obj[nameSplits[i]]) {
+                obj[nameSplits[i]] = {};
+            }
+            obj = obj[nameSplits[i]];
+        }
+        name = nameSplits.pop();
+        obj[name] = val;
+    };
+
+    goog.array.forEach(elContent.querySelectorAll('[name]'), function (el) {
+        var name = el.getAttribute('name');
+        var val = '';
+        if (el.tagName === goog.dom.TagName.INPUT) {
+            val = el.value;
+        } else if (goog.dom.classes.has(el, 'dropdown')) {
+            try {
+                val = window['jQuery'].call(window, el)['dropdown'].call(el, 'get value');
+            } catch (err) {
+                // semantic ui not supported
+            }
+        }
+        if (val) {
+            appendItem(name, val);
+        }
+    });
+    goog.object.forEach(this._inputsMap, function (input, name) {
+        appendItem(name, input.getValue());
+    });
+    return jsonObj;
 };
 
 /**
@@ -523,15 +605,36 @@ baidu.base.BaseView.prototype.buildJQueryFormData = function (
  * @protected
  */
 baidu.base.BaseView.prototype.saveFormData = function (modelJson, optElement) {
-    var elContainer = optElement || this.getElement();
-    goog.object.forEach(modelJson, function (val, key) {
-        var el = elContainer.querySelector(
-            baidu.base.util.attrSelector('name', key));
-        if (!el) {
-            return;
-        }
-        el.value = val;
-    });
+    var saveFormDataImpl = function (modelJson, optElement, optNamePrefix) {
+        var namePrefix = optNamePrefix || '';
+        var elContainer = optElement || this.getElement();
+        goog.object.forEach(modelJson, function (val, key) {
+            var name = namePrefix + key;
+            if (goog.isObject(val)) {
+                saveFormDataImpl.call(this, val, optElement, name + '.');
+            }
+            var el = elContainer.querySelector(
+                baidu.base.util.attrSelector('name', name));
+            if (el && el.type !== 'file') {
+                el.value = val;
+                if (goog.dom.classes.has(el, 'dropdown')) {
+                    var dropdownVal = val;
+                    if (goog.dom.classes.has(el, 'multiple')) {
+                        dropdownVal = val.split(',');
+                    }
+                    try {
+                        window['jQuery'].call(window, el)['dropdown'].call(el, 'set selected', dropdownVal);
+                    } catch (ex) {
+                        // semantic ui not supported
+                    }
+                }
+            } else if (this._inputsMap[name]) {
+                var input = /** @type {baidu.base.BaseInput} */(this._inputsMap[name]);
+                input.setValue(val);
+            }
+        }, this);
+    };
+    saveFormDataImpl.call(this, modelJson, optElement);
 };
 
 /**
@@ -611,6 +714,30 @@ baidu.base.BaseView.prototype.clearTooltips = function () {
         this.tooltips_[i].dispose();
     }
     this.tooltips_ = [];
+};
+
+/**
+ * Add a input
+ * @param {baidu.base.BaseInput} input The input
+ * @param {string} name The name of the input
+ * @param {Element=} optElContainer The container
+ * @protected
+ */
+baidu.base.BaseView.prototype.addInput = function (input, name, optElContainer) {
+    if (this._inputsMap[name]) {
+        return;
+    }
+    this.addSubView(input, optElContainer);
+    this._inputsMap[name] = input;
+};
+
+/**
+ * Get an input by name
+ * @param {string} name The name of input.
+ * @return {baidu.base.BaseInput?}
+ */
+baidu.base.BaseView.prototype.getInput = function (name) {
+    return this._inputsMap[name] || null;
 };
 
 /**

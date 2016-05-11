@@ -26,6 +26,7 @@ js_library(
         'semanticui.soy',
         'semanticuidialog.js',
         'semanticuipaginationview.js',
+        'semanticuisearchinput.js',
     ],
     name_in_depended = 'jsbase-depending',
     is_closure_based = True,

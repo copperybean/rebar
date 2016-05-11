@@ -42,3 +42,23 @@
   </a>
 </div>
 {/template}
+
+/**
+ * search input
+ */
+{template .searchInput}
+<div>
+    <div class="ui search"><div class="ui fluid input">
+        <input class="prompt" type="text"/>
+    </div></div>
+    <div id="{baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS}" style="padding:5px 0; line-height:2.5;"></div>
+</div>
+{/template}
+
+/**
+ * @param item
+ */
+{template .searchInputItem}
+<div class="ui label">{$item}<i class="delete icon"></i>
+</div>
+{/template}

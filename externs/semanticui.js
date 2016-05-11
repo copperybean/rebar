@@ -5,15 +5,29 @@
 jQuery.prototype.modal = function (param) {};
 
 /**
- * 弹出semantic ui的对话框
+ * checkbox 属性
  * @param {string=} action The action
  * @param {*=} arg1 The argument
  * @param {*=} arg2 The argument
  */
 jQuery.prototype.checkbox = function (action, arg1, arg2) {};
 
-
 var semanticui;
+
+/**
+ * The modal param api setting
+ * @constructor
+ */
+semanticui.modalParamApiSetting = function () {
+    /**
+     * @type {string}
+     */
+    this.action;
+    /**
+     * @type {string}
+     */
+    this.url;
+};
 
 /**
  * @constructor
@@ -73,6 +87,16 @@ semanticui.modalParam = function () {
      * @type {Function}
      */
     this.onSelect;
+
+    /**
+     * @type {Function}
+     */
+    this.onChecked;
+
+    /**
+     * @type {Function}
+     */
+    this.onUnchecked;
 
     /**
      * @type {string}

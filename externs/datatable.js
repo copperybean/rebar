@@ -76,6 +76,21 @@ var dataTableSettingLanguage = function () {
      * @type {string}
      */
     this.zeroRecords;
+
+    /**
+     * @type {string}
+     */
+    this.info;
+
+    /**
+     * @type {string}
+     */
+    this.infoEmpty;
+
+    /**
+     * @type {string}
+     */
+    this.infoFiltered;
 };
 
 /**
@@ -154,6 +169,11 @@ var dataTableSettings = function () {
      * @type {boolean}
      */
     this.destroy;
+
+    /**
+     * @type {boolean}
+     */
+    this.info;
 
     /**
      * @type {dataTableSettingLanguage}

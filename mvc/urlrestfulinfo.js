@@ -79,13 +79,15 @@ baidu.base.UrlRestfulInfo.prototype.generateUri = function (uri, token) {
             return uri;
         }
         var keys = token.split('&');
+        var replaceArr = this._parseReplaceTarget();
         goog.array.forEach(keys, function (item) {
             var map = this.fillMap;
             if (map && map[item]) {
-                if (undefined === this.replaceTarget) {
-                    return;
-                }
-                uri = uri.replace(this.replaceTarget, map[item]);
+                goog.array.forEach(replaceArr, function (replaceInfo) {
+                    if (goog.string.contains(uri, replaceInfo)) {
+                        uri = uri.replace(replaceInfo, map[item]);
+                    }
+                });
             }
         }, this);
         // 将旧token替换
@@ -95,6 +97,18 @@ baidu.base.UrlRestfulInfo.prototype.generateUri = function (uri, token) {
         return uri + '?' + token;
     }
     return uri;
+};
+
+/**
+ * 解析replaceTarget成数组
+ * @return {Array}
+ * @private
+ */
+baidu.base.UrlRestfulInfo.prototype._parseReplaceTarget = function () {
+    if (!this.replaceTarget) {
+        return [];
+    }
+    return this.replaceTarget.split(';');
 };
 
 /**
