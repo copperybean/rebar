@@ -3,10 +3,10 @@
  *
  * @author zhangzhihong02
  */
-goog.provide('baidu.base.SemanticUIPaginationView');
+goog.provide('rebar.ext.sui.PaginationView');
 
 goog.require('baidu.base.PaginationView');
-goog.require('baidu.base.tplSemanticUI');
+goog.require('rebar.ext.sui.tpl');
 
 /**
  * 一个基于semantic ui实现的分页控件
@@ -15,20 +15,20 @@ goog.require('baidu.base.tplSemanticUI');
  * @constructor
  * @extends {baidu.base.PaginationView}
  */
-baidu.base.SemanticUIPaginationView = function (optPageSize) {
+rebar.ext.sui.PaginationView = function (optPageSize) {
     baidu.base.PaginationView.call(this, optPageSize);
 };
-goog.inherits(baidu.base.SemanticUIPaginationView, baidu.base.PaginationView);
+goog.inherits(rebar.ext.sui.PaginationView, baidu.base.PaginationView);
 
 /**
  * @param {string=} optName
  * 作为datatables的翻页控件
  */
-baidu.base.SemanticUIPaginationView.extendsDataTablePaging = function (optName) {
+rebar.ext.sui.PaginationView.extendsDataTablePaging = function (optName) {
     var name = optName || 'simple_numbers';
     $.fn.dataTableExt.oPagination[name] = /** @type {dataTablePaginationCallbacks} */({
         fnInit: function (oSettings, nPaging, fnCallbackDraw) {
-            var view = new baidu.base.SemanticUIPaginationView(
+            var view = new rebar.ext.sui.PaginationView(
                 oSettings._iDisplayLength);
             view.render(nPaging);
             var eName = baidu.base.PaginationView.Events.ChangePage;
@@ -56,8 +56,8 @@ baidu.base.SemanticUIPaginationView.extendsDataTablePaging = function (optName) 
 /**
  * @override
  */
-baidu.base.SemanticUIPaginationView.prototype.getVisibleStartPage = function () {
-    var ret = baidu.base.SemanticUIPaginationView.superClass_.getVisibleStartPage.call(this);
+rebar.ext.sui.PaginationView.prototype.getVisibleStartPage = function () {
+    var ret = rebar.ext.sui.PaginationView.superClass_.getVisibleStartPage.call(this);
     if (ret === 0) {
         ++ret;
     } else if (ret + this.getPageNumShow() >= this.getTotalPage()) {
@@ -69,22 +69,22 @@ baidu.base.SemanticUIPaginationView.prototype.getVisibleStartPage = function () 
 /**
  * @override
  */
-baidu.base.SemanticUIPaginationView.prototype.getActiveCssClass = function () {
+rebar.ext.sui.PaginationView.prototype.getActiveCssClass = function () {
     return 'active';
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUIPaginationView.prototype.getDisableCssClass = function () {
+rebar.ext.sui.PaginationView.prototype.getDisableCssClass = function () {
     return 'disabled';
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUIPaginationView.prototype.updateView = function () {
-    baidu.base.SemanticUIPaginationView.superClass_.updateView.call(this);
+rebar.ext.sui.PaginationView.prototype.updateView = function () {
+    rebar.ext.sui.PaginationView.superClass_.updateView.call(this);
 
     var startPage = this.getVisibleStartPage();
     var totalPage = this.getTotalPage();
@@ -124,8 +124,8 @@ baidu.base.SemanticUIPaginationView.prototype.updateView = function () {
 /**
  * @override
  */
-baidu.base.SemanticUIPaginationView.prototype.buildDom = function () {
-    return baidu.base.tplSemanticUI.pagination({
+rebar.ext.sui.PaginationView.prototype.buildDom = function () {
+    return rebar.ext.sui.tpl.pagination({
         viewId: this.getId(),
         numShow: this.getPageNumShow()
     });
@@ -134,9 +134,9 @@ baidu.base.SemanticUIPaginationView.prototype.buildDom = function () {
 /**
  * @enum {string}
  */
-baidu.base.SemanticUIPaginationView.DomConst = {
+rebar.ext.sui.PaginationView.DomConst = {
     ID_START_GAP: 'sgap',
     ID_END_GAP: 'egap'
 };
-baidu.base.spvdc = baidu.base.SemanticUIPaginationView.DomConst;
+baidu.base.spvdc = rebar.ext.sui.PaginationView.DomConst;
 

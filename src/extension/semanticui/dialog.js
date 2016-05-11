@@ -3,11 +3,11 @@
  *
  * @author zhangzhihong02
  */
-goog.provide('baidu.base.SemanticUIDialog');
+goog.provide('rebar.ext.sui.Dialog');
 
 goog.require('baidu.base.BaseView');
 goog.require('baidu.base.DialogInterface');
-goog.require('baidu.base.tplSemanticUI');
+goog.require('rebar.ext.sui.tpl');
 
 /**
  * constructor
@@ -16,7 +16,7 @@ goog.require('baidu.base.tplSemanticUI');
  * @extends {baidu.base.BaseView}
  * @implements {baidu.base.DialogInterface}
  */
-baidu.base.SemanticUIDialog = function (optHideCloseIcon) {
+rebar.ext.sui.Dialog = function (optHideCloseIcon) {
     baidu.base.BaseView.call(this);
 
     /**
@@ -37,21 +37,21 @@ baidu.base.SemanticUIDialog = function (optHideCloseIcon) {
      */
     this._hideCloseIcon = optHideCloseIcon;
 };
-goog.inherits(baidu.base.SemanticUIDialog, baidu.base.BaseView);
+goog.inherits(rebar.ext.sui.Dialog, baidu.base.BaseView);
 
 /**
  * @param {string} msg The msg to show.
  * @param {string=} optTitle The optional title.
  */
-baidu.base.SemanticUIDialog.popupError = function (msg, optTitle) {
-    var dialog = new baidu.base.SemanticUIDialog();
+rebar.ext.sui.Dialog.popupError = function (msg, optTitle) {
+    var dialog = new rebar.ext.sui.Dialog();
     dialog.setup(optTitle || '错误', msg, false, true).show();
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUIDialog.prototype.setup = function (
+rebar.ext.sui.Dialog.prototype.setup = function (
     title, content, optShowCancel, optShowYes) {
     if (!this.getElement()) {
         this.createDom();
@@ -64,7 +64,7 @@ baidu.base.SemanticUIDialog.prototype.setup = function (
         elContent.innerHTML = content;
     }
 
-    var elCancel = this.getDomById(baidu.base.suidc.ID_CANCEL_BTN);
+    var elCancel = this.getDomById(rebar.ext.sui.ddc.ID_CANCEL_BTN);
     if (optShowCancel === false) {
         goog.style.showElement(elCancel, false);
     } else {
@@ -74,7 +74,7 @@ baidu.base.SemanticUIDialog.prototype.setup = function (
         goog.style.showElement(elCancel, true);
     }
 
-    var elYes = this.getDomById(baidu.base.suidc.ID_OK_BTN);
+    var elYes = this.getDomById(rebar.ext.sui.ddc.ID_OK_BTN);
     if (optShowYes === false) {
         goog.style.showElement(elYes, false);
     } else {
@@ -89,7 +89,7 @@ baidu.base.SemanticUIDialog.prototype.setup = function (
 /**
  * @override
  */
-baidu.base.SemanticUIDialog.prototype.show = function () {
+rebar.ext.sui.Dialog.prototype.show = function () {
     this.render();
     $(this.getElement()).modal({
         allowMultiple: true,
@@ -103,22 +103,22 @@ baidu.base.SemanticUIDialog.prototype.show = function () {
 /**
  * 刷新
  */
-baidu.base.SemanticUIDialog.prototype.refresh = function () {
+rebar.ext.sui.Dialog.prototype.refresh = function () {
     $(this.getElement()).modal('refresh');
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUIDialog.prototype.close = function () {
+rebar.ext.sui.Dialog.prototype.close = function () {
     $(this.getElement()).modal('hide');
 };
 
 /**
  * @param {boolean} flag The switcher.
  */
-baidu.base.SemanticUIDialog.prototype.enableYesButton = function (flag) {
-    var el = this.getDomById(baidu.base.suidc.ID_OK_BTN);
+rebar.ext.sui.Dialog.prototype.enableYesButton = function (flag) {
+    var el = this.getDomById(rebar.ext.sui.ddc.ID_OK_BTN);
     if (flag) {
         goog.dom.classes.remove(el, 'disabled');
     } else {
@@ -129,7 +129,7 @@ baidu.base.SemanticUIDialog.prototype.enableYesButton = function (flag) {
 /**
  * @private
  */
-baidu.base.SemanticUIDialog.prototype.onApprove_ = function () {
+rebar.ext.sui.Dialog.prototype.onApprove_ = function () {
     if (this.yesOnceCallback_
         && this.yesOnceCallback_.call(null) === false) {
         return false;
@@ -139,7 +139,7 @@ baidu.base.SemanticUIDialog.prototype.onApprove_ = function () {
 /**
  * @private
  */
-baidu.base.SemanticUIDialog.prototype.onDeny_ = function () {
+rebar.ext.sui.Dialog.prototype.onDeny_ = function () {
     if (this.cancelOnceCallback_
         && this.cancelOnceCallback_.call(null) === false) {
         return false;
@@ -149,7 +149,7 @@ baidu.base.SemanticUIDialog.prototype.onDeny_ = function () {
 /**
  * @private
  */
-baidu.base.SemanticUIDialog.prototype.onHidden_ = function () {
+rebar.ext.sui.Dialog.prototype.onHidden_ = function () {
     this.cancelOnceCallback_ = this.yesOnceCallback_ = null;
     this.remove();
 };
@@ -157,15 +157,15 @@ baidu.base.SemanticUIDialog.prototype.onHidden_ = function () {
 /**
  * @override
  */
-baidu.base.SemanticUIDialog.prototype.renderDomWithIdPrefix = function () {
+rebar.ext.sui.Dialog.prototype.renderDomWithIdPrefix = function () {
     return true;
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUIDialog.prototype.buildDom = function () {
-    return baidu.base.tplSemanticUI.dialog({
+rebar.ext.sui.Dialog.prototype.buildDom = function () {
+    return rebar.ext.sui.tpl.dialog({
         viewId: this.getId(),
         hideCloseIcon: this._hideCloseIcon
     });
@@ -174,17 +174,17 @@ baidu.base.SemanticUIDialog.prototype.buildDom = function () {
 /**
  * @override
  */
-baidu.base.SemanticUIDialog.prototype.disposeInternal = function () {
+rebar.ext.sui.Dialog.prototype.disposeInternal = function () {
     this.close();
 
-    baidu.base.SemanticUIDialog.superClass_.disposeInternal.call(this);
+    rebar.ext.sui.Dialog.superClass_.disposeInternal.call(this);
 };
 
 /**
  * @enum {string}
  */
-baidu.base.SemanticUIDialog.DomConst = {
+rebar.ext.sui.Dialog.DomConst = {
     ID_CANCEL_BTN: 'c',
     ID_OK_BTN: 'o'
 };
-baidu.base.suidc = baidu.base.SemanticUIDialog.DomConst;
+rebar.ext.sui.ddc = rebar.ext.sui.Dialog.DomConst;

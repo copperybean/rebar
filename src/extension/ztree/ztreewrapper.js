@@ -3,7 +3,7 @@
  *
  * @author zhangzhihong02
  */
-goog.provide('baidu.base.ZTreeWrapper');
+goog.provide('rebar.ext.ztree.ZTreeWrapper');
 
 goog.require('baidu.base.BaseView');
 
@@ -13,7 +13,7 @@ goog.require('baidu.base.BaseView');
  * @constructor
  * @extends {baidu.base.BaseView}
  */
-baidu.base.ZTreeWrapper = function (nodes, zTreeSettings) {
+rebar.ext.ztree.ZTreeWrapper = function (nodes, zTreeSettings) {
     baidu.base.BaseView.call(this);
 
     /**
@@ -58,12 +58,12 @@ baidu.base.ZTreeWrapper = function (nodes, zTreeSettings) {
      */
     this.hiddenNodes_ = [];
 };
-goog.inherits(baidu.base.ZTreeWrapper, baidu.base.BaseView);
+goog.inherits(rebar.ext.ztree.ZTreeWrapper, baidu.base.BaseView);
 
 /**
  * @param {string} queryText The search query
  */
-baidu.base.ZTreeWrapper.prototype.updateBySearch = function (queryText) {
+rebar.ext.ztree.ZTreeWrapper.prototype.updateBySearch = function (queryText) {
     if (!this.ztreeObj_ || queryText === this.searchQuery_) {
         return;
     }
@@ -118,15 +118,15 @@ baidu.base.ZTreeWrapper.prototype.updateBySearch = function (queryText) {
 /**
  * @return {zTreeObj}
  */
-baidu.base.ZTreeWrapper.prototype.getZTreeObj = function () {
+rebar.ext.ztree.ZTreeWrapper.prototype.getZTreeObj = function () {
     return this.ztreeObj_;
 };
 
 /**
  * @override
  */
-baidu.base.ZTreeWrapper.prototype.enterDocument = function () {
-    baidu.base.ZTreeWrapper.superClass_.enterDocument.call(this);
+rebar.ext.ztree.ZTreeWrapper.prototype.enterDocument = function () {
+    rebar.ext.ztree.ZTreeWrapper.superClass_.enterDocument.call(this);
 
     this.ztreeObj_ = $.fn.zTree.init(
         $(this.getElement()), this.ztreeSettings_, this.ztreeNodes_);
@@ -136,8 +136,8 @@ baidu.base.ZTreeWrapper.prototype.enterDocument = function () {
 /**
  * @override
  */
-baidu.base.ZTreeWrapper.prototype.exitDocument = function () {
-    baidu.base.ZTreeWrapper.superClass_.exitDocument.call(this);
+rebar.ext.ztree.ZTreeWrapper.prototype.exitDocument = function () {
+    rebar.ext.ztree.ZTreeWrapper.superClass_.exitDocument.call(this);
 
     this.ztreeObj_.destroy();
     this.ztreeObj_ = null;
@@ -150,7 +150,7 @@ baidu.base.ZTreeWrapper.prototype.exitDocument = function () {
  *     会把展开了的节点记下来
  * @private
  */
-baidu.base.ZTreeWrapper.prototype.expandDirectLineNodes_ = function (
+rebar.ext.ztree.ZTreeWrapper.prototype.expandDirectLineNodes_ = function (
     node, optExpandedNodesMap) {
     var reverseNodes = [];
     for (var pNode = node; pNode; pNode = pNode.getParentNode()) {
@@ -170,7 +170,7 @@ baidu.base.ZTreeWrapper.prototype.expandDirectLineNodes_ = function (
  * @param {Object.<string, zTreeNode>} excludedNodesMap excludedNodesMap
  * @private
  */
-baidu.base.ZTreeWrapper.prototype.hideNodes_ = function (
+rebar.ext.ztree.ZTreeWrapper.prototype.hideNodes_ = function (
     nodes, visibleNodesMap, excludedNodesMap) {
     goog.array.forEach(nodes, function (n) {
         if (excludedNodesMap[n.tId]) {
@@ -193,7 +193,7 @@ baidu.base.ZTreeWrapper.prototype.hideNodes_ = function (
  * @param {Object.<string, zTreeNode>} excludedNodesMap The nodes to be excluded.
  * @private
  */
-baidu.base.ZTreeWrapper.prototype.collapseNodes_ = function (nodes, excludedNodesMap) {
+rebar.ext.ztree.ZTreeWrapper.prototype.collapseNodes_ = function (nodes, excludedNodesMap) {
     goog.array.forEach(nodes, function (n) {
         if (!n.isParent || !n.open) {
             return;
@@ -210,8 +210,8 @@ baidu.base.ZTreeWrapper.prototype.collapseNodes_ = function (nodes, excludedNode
 /**
  * @override
  */
-baidu.base.ZTreeWrapper.prototype.disposeInternal = function () {
-    baidu.base.ZTreeWrapper.superClass_.disposeInternal.call(this);
+rebar.ext.ztree.ZTreeWrapper.prototype.disposeInternal = function () {
+    rebar.ext.ztree.ZTreeWrapper.superClass_.disposeInternal.call(this);
     if (this.ztreeObj_) {
         this.ztreeObj_.destroy();
         this.ztreeObj_ = null;

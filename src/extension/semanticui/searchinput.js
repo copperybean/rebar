@@ -3,7 +3,7 @@
  *
  * @file The semantic ui search input
  */
-goog.provide('baidu.base.SemanticUISearchInput');
+goog.provide('rebar.ext.sui.SearchInput');
 
 goog.require('baidu.base.BaseInput');
 goog.require('baidu.base.Const');
@@ -20,7 +20,7 @@ goog.require('goog.dom.classes');
  * @constructor
  * @extends {baidu.base.BaseInput}
  */
-baidu.base.SemanticUISearchInput = function (urlPattern, optDelimiter) {
+rebar.ext.sui.SearchInput = function (urlPattern, optDelimiter) {
     baidu.base.BaseInput.call(this);
 
     /**
@@ -47,27 +47,27 @@ baidu.base.SemanticUISearchInput = function (urlPattern, optDelimiter) {
      */
     this._selectedItemsContainer = null;
 };
-goog.inherits(baidu.base.SemanticUISearchInput, baidu.base.BaseInput);
+goog.inherits(rebar.ext.sui.SearchInput, baidu.base.BaseInput);
 
 /**
  * The selected items area can be more wide than input control, if you set a different container.
  * @param {Element} el The element.
  */
-baidu.base.SemanticUISearchInput.prototype.setSelectedItemsContainer = function (el) {
+rebar.ext.sui.SearchInput.prototype.setSelectedItemsContainer = function (el) {
     this._selectedItemsContainer = el;
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUISearchInput.prototype.getValue = function () {
+rebar.ext.sui.SearchInput.prototype.getValue = function () {
     return this._items.join(this._delimiter);
 };
 
 /**
  * @override
  */
-baidu.base.SemanticUISearchInput.prototype.setValue = function (val) {
+rebar.ext.sui.SearchInput.prototype.setValue = function (val) {
     this.getDomById(baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS).innerHTML = '';
     var items = val.split(this._delimiter);
     this._items = [];
@@ -82,8 +82,8 @@ baidu.base.SemanticUISearchInput.prototype.setValue = function (val) {
 /**
  * @override
  */
-baidu.base.SemanticUISearchInput.prototype.enterDocument = function () {
-    baidu.base.SemanticUISearchInput.superClass_.enterDocument.call(this);
+rebar.ext.sui.SearchInput.prototype.enterDocument = function () {
+    rebar.ext.sui.SearchInput.superClass_.enterDocument.call(this);
 
     this._updateSelectedItemsWidth();
     this.getHandler().listen(this.getElement(), goog.events.EventType.CLICK, this._onClick);
@@ -116,7 +116,7 @@ baidu.base.SemanticUISearchInput.prototype.enterDocument = function () {
  * To update the selected items width
  * @private
  */
-baidu.base.SemanticUISearchInput.prototype._updateSelectedItemsWidth = function () {
+rebar.ext.sui.SearchInput.prototype._updateSelectedItemsWidth = function () {
     if (!this._selectedItemsContainer) {
         return;
     }
@@ -132,13 +132,13 @@ baidu.base.SemanticUISearchInput.prototype._updateSelectedItemsWidth = function 
  * @param {string} item The item
  * @private
  */
-baidu.base.SemanticUISearchInput.prototype._addItem = function (item) {
+rebar.ext.sui.SearchInput.prototype._addItem = function (item) {
     if (this._items.indexOf(item) >= 0) {
         baidu.base.MessageBox.getInstance().showTip('不可重复选择');
         return;
     }
     this._items.push(item);
-    var el = baidu.base.util.htmlToElement(baidu.base.tplSemanticUI.searchInputItem({
+    var el = baidu.base.util.htmlToElement(rebar.ext.sui.tpl.searchInputItem({
         item: item
     }));
     this.getDomById(baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS).appendChild(el);
@@ -149,7 +149,7 @@ baidu.base.SemanticUISearchInput.prototype._addItem = function (item) {
  * @param {goog.events.BrowserEvent} e The event
  * @private
  */
-baidu.base.SemanticUISearchInput.prototype._onClick = function (e) {
+rebar.ext.sui.SearchInput.prototype._onClick = function (e) {
     if (!goog.dom.classes.has(e.target, 'delete')) {
         return;
     }
@@ -161,6 +161,6 @@ baidu.base.SemanticUISearchInput.prototype._onClick = function (e) {
 /**
  * @override
  */
-baidu.base.SemanticUISearchInput.prototype.buildDom = function () {
-    return baidu.base.tplSemanticUI.searchInput();
+rebar.ext.sui.SearchInput.prototype.buildDom = function () {
+    return rebar.ext.sui.tpl.searchInput();
 };

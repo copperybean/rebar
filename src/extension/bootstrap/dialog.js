@@ -2,11 +2,11 @@
  * @fileoverview 弹出对话框
  * @author wangshouchuang
  */
-goog.provide('baidu.base.BootStrapDialog');
+goog.provide('rebar.ext.bt.Dialog');
 
 goog.require('baidu.base.BaseView');
 goog.require('baidu.base.DialogInterface');
-goog.require('baidu.base.tplBootStrapDialog');
+goog.require('rebar.ext.bt.tpldialog');
 
 
 /**
@@ -16,7 +16,7 @@ goog.require('baidu.base.tplBootStrapDialog');
  * @implements {baidu.base.DialogInterface}
  * @desc Public实例变量成员 在这里定义
  */
-baidu.base.BootStrapDialog = function () {
+rebar.ext.bt.Dialog = function () {
     baidu.base.BaseView.call(this);
 
     /**
@@ -55,12 +55,12 @@ baidu.base.BootStrapDialog = function () {
      */
     this.cancelBtn_ = null;
 };
-goog.inherits(baidu.base.BootStrapDialog, baidu.base.BaseView);
+goog.inherits(rebar.ext.bt.Dialog, baidu.base.BaseView);
 
 /**
  * @enum {string}
  */
-baidu.base.BootStrapDialog.Events = {
+rebar.ext.bt.Dialog.Events = {
     Shown: 'shown',
     Hidden: 'hidden',
     YesClick: 'yesClick',
@@ -71,23 +71,23 @@ baidu.base.BootStrapDialog.Events = {
  * @param {string} msg The msg to show.
  * @param {string=} optTitle The optional title.
  */
-baidu.base.BootStrapDialog.popupError = function (msg, optTitle) {
-    (new baidu.base.BootStrapDialog()).setup(optTitle || '错误', msg, false, true).
+rebar.ext.bt.Dialog.popupError = function (msg, optTitle) {
+    (new rebar.ext.bt.Dialog()).setup(optTitle || '错误', msg, false, true).
         show();
 };
 
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.focus = function () {
+rebar.ext.bt.Dialog.prototype.focus = function () {
     this.yesBtn_.focus();
 };
 
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.createDom = function () {
-    baidu.base.BootStrapDialog.superClass_.createDom.call(this);
+rebar.ext.bt.Dialog.prototype.createDom = function () {
+    rebar.ext.bt.Dialog.superClass_.createDom.call(this);
 
     this.titleDom_ = this.getDomByClass('modal-title');
     this.contentDom_ = this.getDomByClass('modal-body');
@@ -98,7 +98,7 @@ baidu.base.BootStrapDialog.prototype.createDom = function () {
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.getContentElement = function () {
+rebar.ext.bt.Dialog.prototype.getContentElement = function () {
     if (!this.getElement()) {
         this.createDom();
     }
@@ -108,8 +108,8 @@ baidu.base.BootStrapDialog.prototype.getContentElement = function () {
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.enterDocument = function () {
-    baidu.base.BootStrapDialog.superClass_.enterDocument.call(this);
+rebar.ext.bt.Dialog.prototype.enterDocument = function () {
+    rebar.ext.bt.Dialog.superClass_.enterDocument.call(this);
 
     $(this.getElement()).bind('shown.bs.modal', goog.bind(this.domShowing, this));
     $(this.getElement()).bind('hidden.bs.modal', goog.bind(this.domHiding, this));
@@ -124,7 +124,7 @@ baidu.base.BootStrapDialog.prototype.enterDocument = function () {
  * @param {bootstrap.modalParam=} options 标准的bootstrap设置
  * @override
  */
-baidu.base.BootStrapDialog.prototype.show = function (options) {
+rebar.ext.bt.Dialog.prototype.show = function (options) {
     this.render();
     var defaults = {
         backdrop: 'static'
@@ -137,7 +137,7 @@ baidu.base.BootStrapDialog.prototype.show = function (options) {
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.close = function () {
+rebar.ext.bt.Dialog.prototype.close = function () {
     $(this.getElement()).modal('hide');
 };
 
@@ -145,24 +145,24 @@ baidu.base.BootStrapDialog.prototype.close = function () {
  * 页面打开事件
  * @protected
  */
-baidu.base.BootStrapDialog.prototype.domShowing = function (event) {
-    this.dispatchEvent(baidu.base.BootStrapDialog.Events.Shown);
+rebar.ext.bt.Dialog.prototype.domShowing = function (event) {
+    this.dispatchEvent(rebar.ext.bt.Dialog.Events.Shown);
 };
 
 /**
  * 页面关闭事件
  * @protected
  */
-baidu.base.BootStrapDialog.prototype.domHiding = function (event) {
+rebar.ext.bt.Dialog.prototype.domHiding = function (event) {
     this.cancelOnceCallback_ = this.yesOnceCallback_ = null;
     this.remove();
-    this.dispatchEvent(baidu.base.BootStrapDialog.Events.Hidden);
+    this.dispatchEvent(rebar.ext.bt.Dialog.Events.Hidden);
 };
 
 /**
  * @protected
  */
-baidu.base.BootStrapDialog.prototype.yesBtnClick = function (event) {
+rebar.ext.bt.Dialog.prototype.yesBtnClick = function (event) {
     if (this.yesOnceCallback_) {
         if (this.yesOnceCallback_.call(window) === false) {
             return;
@@ -170,27 +170,27 @@ baidu.base.BootStrapDialog.prototype.yesBtnClick = function (event) {
         this.yesOnceCallback_ = null;
     }
     this.close();
-    this.dispatchEvent(baidu.base.BootStrapDialog.Events.YesClick);
+    this.dispatchEvent(rebar.ext.bt.Dialog.Events.YesClick);
 };
 
 /**
  * @protected
  */
-baidu.base.BootStrapDialog.prototype.cancelBtnClick = function (event) {
+rebar.ext.bt.Dialog.prototype.cancelBtnClick = function (event) {
     if (this.cancelOnceCallback_) {
         this.cancelOnceCallback_.call(window);
         this.cancelOnceCallback_ = null;
     }
-    this.dispatchEvent(baidu.base.BootStrapDialog.Events.CancelClick);
+    this.dispatchEvent(rebar.ext.bt.Dialog.Events.CancelClick);
 };
 
 /**
  * 设置title或获取title
  * @param {string} title 弹出框标题
- * @return {string || baidu.base.BootStrapDialog}
+ * @return {string || rebar.ext.bt.Dialog}
  * @desc 不传入参数则获取title
  */
-baidu.base.BootStrapDialog.prototype.title = function (title) {
+rebar.ext.bt.Dialog.prototype.title = function (title) {
     if (arguments.length === 0) {
         return this.titleDom_.innerText;
     } else {
@@ -203,10 +203,10 @@ baidu.base.BootStrapDialog.prototype.title = function (title) {
 /**
  * 设置content或获取content
  * @param {string} content 弹出框提示内容，可以是HTML
- * @return {string || baidu.base.BootStrapDialog}
+ * @return {string || rebar.ext.bt.Dialog}
  * @desc 不传入参数则获取content
  */
-baidu.base.BootStrapDialog.prototype.content = function (content) {
+rebar.ext.bt.Dialog.prototype.content = function (content) {
     if (arguments.length === 0) {
         return this.contentDom_.innerHTML;
     } else {
@@ -219,7 +219,7 @@ baidu.base.BootStrapDialog.prototype.content = function (content) {
 /**
  * @param {boolean} enable
  */
-baidu.base.BootStrapDialog.prototype.enableYesButton = function (enable) {
+rebar.ext.bt.Dialog.prototype.enableYesButton = function (enable) {
     if (enable) {
         goog.dom.classes.remove(this.yesBtn_, 'disabled');
     } else {
@@ -230,7 +230,7 @@ baidu.base.BootStrapDialog.prototype.enableYesButton = function (enable) {
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.setup = function (title, content, showCancel, showYes) {
+rebar.ext.bt.Dialog.prototype.setup = function (title, content, showCancel, showYes) {
     if (!this.getElement()) {
         this.createDom();
     }
@@ -278,8 +278,8 @@ baidu.base.BootStrapDialog.prototype.setup = function (title, content, showCance
 /**
  * @override
  */
-baidu.base.BootStrapDialog.prototype.buildDom = function () {
-    var html = baidu.base.tplBootStrapDialog.dialog({
+rebar.ext.bt.Dialog.prototype.buildDom = function () {
+    var html = rebar.ext.bt.tpldialog.dialog({
         title: '提示',
         content: '',
         // 是否显示取消按钮

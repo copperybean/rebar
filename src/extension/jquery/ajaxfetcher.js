@@ -3,7 +3,7 @@
  *
  * @author hector<zzh-83@163.com>
  */
-goog.provide('baidu.base.JQueryFetcher');
+goog.provide('rebar.ext.jquery.AjaxFetcher');
 
 goog.require('baidu.base.ClosureDialog');
 goog.require('baidu.base.DialogInterface');
@@ -15,7 +15,7 @@ goog.require('goog.async.Delay');
  * @param {string=} optBasePath
  * @constructor
  */
-baidu.base.JQueryFetcher = function (optBasePath) {
+rebar.ext.jquery.AjaxFetcher = function (optBasePath) {
 
     /**
      * @type {string}
@@ -35,7 +35,7 @@ baidu.base.JQueryFetcher = function (optBasePath) {
  * @param {string=} mutexQueue
  * @return {boolean}
  */
-baidu.base.JQueryFetcher.prototype.isSendingRequest = function (url, mutexQueue) {
+rebar.ext.jquery.AjaxFetcher.prototype.isSendingRequest = function (url, mutexQueue) {
     return !!this.urlAjaxMap_[url + (mutexQueue || '')];
 };
 
@@ -46,7 +46,7 @@ baidu.base.JQueryFetcher.prototype.isSendingRequest = function (url, mutexQueue)
  * @return {jQuery.jqXHR}
  * @desc 测试默认会使用mock ajax
  */
-baidu.base.JQueryFetcher.prototype.ajax = function (options) {
+rebar.ext.jquery.AjaxFetcher.prototype.ajax = function (options) {
     this.info_(options);
 
     var defaults = {
@@ -127,7 +127,7 @@ baidu.base.JQueryFetcher.prototype.ajax = function (options) {
 /**
  * 中断所有请求
  */
-baidu.base.JQueryFetcher.prototype.abortAll = function () {
+rebar.ext.jquery.AjaxFetcher.prototype.abortAll = function () {
     for (var key in this.urlAjaxMap_) {
         this.urlAjaxMap_[key].abort();
     }
@@ -136,7 +136,7 @@ baidu.base.JQueryFetcher.prototype.abortAll = function () {
 /**
  * @protected
  */
-baidu.base.JQueryFetcher.prototype.warn401Error = function () {
+rebar.ext.jquery.AjaxFetcher.prototype.warn401Error = function () {
     var msg = '您已经退出登陆，点击确定刷新页面';
     this.getErrorDialog(true).setup('未登陆', msg, true, function () {
         window.location.reload();
@@ -148,7 +148,7 @@ baidu.base.JQueryFetcher.prototype.warn401Error = function () {
  * @param {number=} optResponseStatus
  * @protected
  */
-baidu.base.JQueryFetcher.prototype.warn5XXError = function (responseText, optResponseStatus) {
+rebar.ext.jquery.AjaxFetcher.prototype.warn5XXError = function (responseText, optResponseStatus) {
     var m = '服务器发生错误';
     try {
         var exception = JSON.parse(responseText);
@@ -168,14 +168,14 @@ baidu.base.JQueryFetcher.prototype.warn5XXError = function (responseText, optRes
  * @return {baidu.base.DialogInterface}
  * @protected
  */
-baidu.base.JQueryFetcher.prototype.getErrorDialog = function (optReset) {
+rebar.ext.jquery.AjaxFetcher.prototype.getErrorDialog = function (optReset) {
     if (optReset) {
         this.destroyErrorDialog_();
     }
-    if (!baidu.base.JQueryFetcher.errorDialog_) {
-        baidu.base.JQueryFetcher.errorDialog_ = this.buildErrorDialog();
+    if (!rebar.ext.jquery.AjaxFetcher.errorDialog_) {
+        rebar.ext.jquery.AjaxFetcher.errorDialog_ = this.buildErrorDialog();
     }
-    return baidu.base.JQueryFetcher.errorDialog_;
+    return rebar.ext.jquery.AjaxFetcher.errorDialog_;
 };
 
 /**
@@ -183,17 +183,17 @@ baidu.base.JQueryFetcher.prototype.getErrorDialog = function (optReset) {
  * @return {baidu.base.DialogInterface}
  * @protected
  */
-baidu.base.JQueryFetcher.prototype.buildErrorDialog = function () {
+rebar.ext.jquery.AjaxFetcher.prototype.buildErrorDialog = function () {
     return new baidu.base.ClosureDialog();
 };
 
 /**
  * @private
  */
-baidu.base.JQueryFetcher.prototype.destroyErrorDialog_ = function () {
-    if (baidu.base.JQueryFetcher.errorDialog_) {
-        baidu.base.JQueryFetcher.errorDialog_.dispose();
-        baidu.base.JQueryFetcher.errorDialog_ = null;
+rebar.ext.jquery.AjaxFetcher.prototype.destroyErrorDialog_ = function () {
+    if (rebar.ext.jquery.AjaxFetcher.errorDialog_) {
+        rebar.ext.jquery.AjaxFetcher.errorDialog_.dispose();
+        rebar.ext.jquery.AjaxFetcher.errorDialog_ = null;
     }
 };
 
@@ -201,7 +201,7 @@ baidu.base.JQueryFetcher.prototype.destroyErrorDialog_ = function () {
  * @param {*} object
  * @private
  */
-baidu.base.JQueryFetcher.prototype.info_ = function (object) {
+rebar.ext.jquery.AjaxFetcher.prototype.info_ = function (object) {
     window.console.info(object);
 };
 
@@ -209,30 +209,30 @@ baidu.base.JQueryFetcher.prototype.info_ = function (object) {
  * @type {baidu.base.DialogInterface}
  * @private
  */
-baidu.base.JQueryFetcher.errorDialog_ = null;
+rebar.ext.jquery.AjaxFetcher.errorDialog_ = null;
 
 /**
  * @extends {jQuery.ajaxSettings}
  */
-baidu.base.JQueryFetcherSettings = {};
+rebar.ext.jquery.AjaxFetcherSettings = {};
 
 /**
  * @type {boolean}
  */
-baidu.base.JQueryFetcherSettings.popupError = true;
+rebar.ext.jquery.AjaxFetcherSettings.popupError = true;
 
 /**
  * @type {string}
  */
-baidu.base.JQueryFetcherSettings.mutexQueue = '';
+rebar.ext.jquery.AjaxFetcherSettings.mutexQueue = '';
 
 /**
  * @type {string}
  */
-baidu.base.JQueryFetcherSettings.loadingInfo = '';
+rebar.ext.jquery.AjaxFetcherSettings.loadingInfo = '';
 
 /**
  * @type {boolean}
  */
-baidu.base.JQueryFetcherSettings.abortSameUrlAjax = true;
+rebar.ext.jquery.AjaxFetcherSettings.abortSameUrlAjax = true;
 
