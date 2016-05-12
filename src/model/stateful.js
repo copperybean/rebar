@@ -5,9 +5,9 @@
 /* jshint -W069 */
 /* eslint-disable fecs-properties-quote */
 /* eslint-disable fecs-dot-notation */
-goog.provide('baidu.base.Stateful');
+goog.provide('rebar.model.Stateful');
 
-goog.require('baidu.base.BaseModel');
+goog.require('rebar.mvc.BaseModel');
 
 goog.require('goog.Uri');
 
@@ -20,36 +20,36 @@ goog.require('goog.Uri');
  * 注：由于切换页面时浏览器不刷新，所以不能通过传统的基于服务器端解析的url
  * @interface
  */
-baidu.base.Stateful = function () {
+rebar.model.Stateful = function () {
 };
 
 /**
  * 设置当前状态，该方法的真正作用也应该是实现者继续调用该接口类型
  * 成员变量的setState来支持整个应用的状态化。
  *
- * @param {baidu.base.StateModel} state
+ * @param {rebar.model.StateModel} state
  * @return {boolean} 如果参数不被支持则返回false
  */
-baidu.base.Stateful.prototype.setState;
+rebar.model.Stateful.prototype.setState;
 
 /**
  * 获取当前状态，该方法真正的作用应该是实现者继续调用该接口类型的成员
  * 变量的getState来实现整个应用的状态化。
  *
  * state的key不可以重复（因为会merge在一起放到url里），所以最好都定义在
- * baidu.base.Stateful.keys里
- * @return {baidu.base.StateModel}
+ * rebar.model.Stateful.keys里
+ * @return {rebar.model.StateModel}
  */
-baidu.base.Stateful.prototype.getState;
+rebar.model.Stateful.prototype.getState;
 
 /**
  * @param {Object.<string, string>=} optStateMap 初始数据.
  * @param {string=} optTitle 可以设置一个可选的title.
  * @constructor
- * @extends {baidu.base.BaseModel}
+ * @extends {rebar.mvc.BaseModel}
  */
-baidu.base.StateModel = function (optStateMap, optTitle) {
-    baidu.base.BaseModel.call(this);
+rebar.model.StateModel = function (optStateMap, optTitle) {
+    rebar.mvc.BaseModel.call(this);
 
     /**
      * @type {Object.<string, string>}
@@ -63,42 +63,42 @@ baidu.base.StateModel = function (optStateMap, optTitle) {
      */
     this.title_ = optTitle || '';
 };
-goog.inherits(baidu.base.StateModel, baidu.base.BaseModel);
+goog.inherits(rebar.model.StateModel, rebar.mvc.BaseModel);
 
 /**
  * Create state model from url's query
  * @param {string} url The url
- * @return {baidu.base.StateModel}
+ * @return {rebar.model.StateModel}
  */
-baidu.base.StateModel.createFromUrl = function (url) {
+rebar.model.StateModel.createFromUrl = function (url) {
     var query = (new goog.Uri(url)).getQueryData();
     var obj = {};
     var keys = query.getKeys();
     goog.array.forEach(keys, function (k) {
         obj[k] = query.get(k);
     });
-    return new baidu.base.StateModel(obj);
+    return new rebar.model.StateModel(obj);
 };
 
 /**
  * 可以在一开始就调用该方法进行设置
- * @param {function (baidu.base.StateModel):string} callback
+ * @param {function (rebar.model.StateModel):string} callback
  */
-baidu.base.StateModel.setToUrlCallback = function (callback) {
-    baidu.base.StateModel.toUrlCallback_ = callback;
+rebar.model.StateModel.setToUrlCallback = function (callback) {
+    rebar.model.StateModel.toUrlCallback_ = callback;
 };
 
 /**
  * @return {string}
  */
-baidu.base.StateModel.prototype.getTitle = function () {
+rebar.model.StateModel.prototype.getTitle = function () {
     return this.title_;
 };
 
 /**
  * @param {string} title The title.
  */
-baidu.base.StateModel.prototype.setTitle = function (title) {
+rebar.model.StateModel.prototype.setTitle = function (title) {
     this.title_ = title;
 };
 
@@ -106,7 +106,7 @@ baidu.base.StateModel.prototype.setTitle = function (title) {
  * @param {string} key
  * @return {boolean}
  */
-baidu.base.StateModel.prototype.hasKey = function (key) {
+rebar.model.StateModel.prototype.hasKey = function (key) {
     return goog.isDef(this.stateMap_[key]);
 };
 
@@ -115,7 +115,7 @@ baidu.base.StateModel.prototype.hasKey = function (key) {
  * @param {string=} defaultVal
  * @return {string|undefined}
  */
-baidu.base.StateModel.prototype.getStateItem = function (key, defaultVal) {
+rebar.model.StateModel.prototype.getStateItem = function (key, defaultVal) {
     return this.stateMap_[key] || defaultVal || undefined;
 };
 
@@ -123,29 +123,29 @@ baidu.base.StateModel.prototype.getStateItem = function (key, defaultVal) {
  * @param {string} key
  * @param {string} state
  */
-baidu.base.StateModel.prototype.setStateItem = function (key, state) {
+rebar.model.StateModel.prototype.setStateItem = function (key, state) {
     this.stateMap_[key] = state;
 };
 
 /**
  * @param {string} key
  */
-baidu.base.StateModel.prototype.removeStateKey = function (key) {
+rebar.model.StateModel.prototype.removeStateKey = function (key) {
     delete this.stateMap_[key];
 };
 
 /**
- * @param {baidu.base.StateModel} state
+ * @param {rebar.model.StateModel} state
  */
-baidu.base.StateModel.prototype.mergeState = function (state) {
+rebar.model.StateModel.prototype.mergeState = function (state) {
     goog.object.extend(this.stateMap_, state.stateMap_);
 };
 
 /**
- * @param {baidu.base.StateModel} state
+ * @param {rebar.model.StateModel} state
  * @return {boolean}
  */
-baidu.base.StateModel.prototype.containsState = function (state) {
+rebar.model.StateModel.prototype.containsState = function (state) {
     for (var key in state.stateMap_) {
         if (this.stateMap_[key] !== state.stateMap_[key]) {
             return false;
@@ -157,14 +157,14 @@ baidu.base.StateModel.prototype.containsState = function (state) {
 /**
  * @return {Object.<string, string>}
  */
-baidu.base.StateModel.prototype.getStateMap = function () {
+rebar.model.StateModel.prototype.getStateMap = function () {
     return this.stateMap_;
 };
 
 /**
  * @override
  */
-baidu.base.StateModel.prototype.toJson = function () {
+rebar.model.StateModel.prototype.toJson = function () {
     return {
         'map': this.stateMap_
     };
@@ -173,7 +173,7 @@ baidu.base.StateModel.prototype.toJson = function () {
 /**
  * @override
  */
-baidu.base.StateModel.prototype.initWitJson = function (obj) {
+rebar.model.StateModel.prototype.initWitJson = function (obj) {
     if (!obj) {
         return false;
     }
@@ -185,9 +185,9 @@ baidu.base.StateModel.prototype.initWitJson = function (obj) {
 /**
  * @return {string}
  */
-baidu.base.StateModel.prototype.toUrl = function () {
-    if (baidu.base.StateModel.toUrlCallback_) {
-        return baidu.base.StateModel.toUrlCallback_.call(undefined, this);
+rebar.model.StateModel.prototype.toUrl = function () {
+    if (rebar.model.StateModel.toUrlCallback_) {
+        return rebar.model.StateModel.toUrlCallback_.call(undefined, this);
     }
     var ret = new goog.Uri();
     goog.object.forEach(this.stateMap_, function (val, k) {
@@ -197,27 +197,7 @@ baidu.base.StateModel.prototype.toUrl = function () {
 };
 
 /**
- * @type {function (baidu.base.StateModel):string}
+ * @type {function (rebar.model.StateModel):string}
  */
-baidu.base.StateModel.toUrlCallback_;
-
-/**
- * 可以用来当作导航条的一个路径
- * deprecated，该model不再建议使用
- * @param {baidu.base.StateModel} stateModel
- * @param {string} title
- * @constructor
- * @extends {baidu.base.BaseModel}
- */
-baidu.base.NavigatePathModel = function (stateModel, title) {
-    /**
-     * @type {baidu.base.StateModel}
-     */
-    this.stateModel = stateModel;
-
-    /**
-     * @type {string}
-     */
-    this.title = title;
-};
+rebar.model.StateModel.toUrlCallback_;
 

@@ -2,7 +2,7 @@
  * @fileoverview messagebox.js的测试文件
  * @author zhangzhihong02
  */
-goog.require('baidu.base.MessageBox');
+goog.require('rebar.util.MessageBox');
 
 goog.require('goog.style');
 
@@ -10,13 +10,13 @@ describe('message.js test suite', function () {
     var msgBox;
 
     beforeEach(function () {
-        msgBox = new baidu.base.MessageBox();
+        msgBox = new rebar.util.MessageBox();
     });
 
     it('showLoading normal test', function () {
         msgBox.showLoading('test');
         expect(msgBox.msgInfoList_.length).toBe(1);
-        expect(msgBox.msgInfoList_[0].type).toBe(baidu.base.MessageBox.MessageType.Loading);
+        expect(msgBox.msgInfoList_[0].type).toBe(rebar.util.MessageBox.MessageType.Loading);
     });
 
     it('showTip normal test', function () {
@@ -25,7 +25,7 @@ describe('message.js test suite', function () {
 
         msgBox.showTip('test');
         expect(msgBox.msgInfoList_.length).toBe(1);
-        expect(msgBox.msgInfoList_[0].type).toBe(baidu.base.MessageBox.MessageType.Tip);
+        expect(msgBox.msgInfoList_[0].type).toBe(rebar.util.MessageBox.MessageType.Tip);
         expect(msgBox.hideDelay_.start).toHaveBeenCalled();
 
         // 显示第二次，期望会导致上一次的被隐藏（通过触发timeout）
@@ -43,7 +43,7 @@ describe('message.js test suite', function () {
     });
 
     it('recordMessage_ normal test', function () {
-        msgBox.recordMessage_('ok', baidu.base.MessageBox.MessageType.Loading);
+        msgBox.recordMessage_('ok', rebar.util.MessageBox.MessageType.Loading);
         expect(msgBox.nextId_).toBe(1);
         expect(msgBox.msgInfoList_.length).toBe(1);
         expect(msgBox.msgInfoList_[0].message).toBe('ok');

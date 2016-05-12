@@ -3,18 +3,18 @@
  *
  * @file 对input在api中没支持的一些功能的包装
  */
-goog.provide('baidu.base.InputWrapper');
+goog.provide('rebar.views.InputWrapper');
 
-goog.require('baidu.base.BaseView');
+goog.require('rebar.mvc.BaseView');
 
 /**
  * @param {number=} optChangeUpdateInterval
  *     用户输入时触发更新事件的时间间隔，设为零或负值不触发
  * @constructor
- * @extends {baidu.base.BaseView}
+ * @extends {rebar.mvc.BaseView}
  */
-baidu.base.InputWrapper = function (optChangeUpdateInterval) {
-    baidu.base.BaseView.call(this);
+rebar.views.InputWrapper = function (optChangeUpdateInterval) {
+    rebar.mvc.BaseView.call(this);
 
     /**
      * @type {goog.async.Delay}
@@ -22,12 +22,12 @@ baidu.base.InputWrapper = function (optChangeUpdateInterval) {
      */
     this.inputDelay_ = this.getInputDelay_(optChangeUpdateInterval);
 };
-goog.inherits(baidu.base.InputWrapper, baidu.base.BaseView);
+goog.inherits(rebar.views.InputWrapper, rebar.mvc.BaseView);
 
 /**
  * @enum {string}
  */
-baidu.base.InputWrapper.Events = {
+rebar.views.InputWrapper.Events = {
     CHANGE_UPDATE: 'change'
 };
 
@@ -36,20 +36,20 @@ baidu.base.InputWrapper.Events = {
  * @return {goog.async.Delay}
  * @private
  */
-baidu.base.InputWrapper.prototype.getInputDelay_ = function (optInterval) {
+rebar.views.InputWrapper.prototype.getInputDelay_ = function (optInterval) {
     if (goog.isNumber(optInterval) && optInterval <= 0) {
         return null;
     }
     return new goog.async.Delay(function () {
-        this.dispatchEvent(baidu.base.InputWrapper.Events.CHANGE_UPDATE);
+        this.dispatchEvent(rebar.views.InputWrapper.Events.CHANGE_UPDATE);
     }, optInterval || 500, this);
 };
 
 /**
  * @override
  */
-baidu.base.InputWrapper.prototype.enterDocument = function () {
-    baidu.base.InputWrapper.superClass_.enterDocument.call(this);
+rebar.views.InputWrapper.prototype.enterDocument = function () {
+    rebar.views.InputWrapper.superClass_.enterDocument.call(this);
 
     this.listenInputChange_();
 };
@@ -57,7 +57,7 @@ baidu.base.InputWrapper.prototype.enterDocument = function () {
 /**
  * @private
  */
-baidu.base.InputWrapper.prototype.listenInputChange_ = function () {
+rebar.views.InputWrapper.prototype.listenInputChange_ = function () {
     if (!this.inputDelay_) {
         return;
     }
@@ -93,6 +93,6 @@ baidu.base.InputWrapper.prototype.listenInputChange_ = function () {
 /**
  * @override
  */
-baidu.base.InputWrapper.prototype.buildDom = function () {
+rebar.views.InputWrapper.prototype.buildDom = function () {
     return '<input>';
 };

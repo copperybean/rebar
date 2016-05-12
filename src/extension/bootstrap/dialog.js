@@ -4,20 +4,20 @@
  */
 goog.provide('rebar.ext.bt.Dialog');
 
-goog.require('baidu.base.BaseView');
-goog.require('baidu.base.DialogInterface');
+goog.require('rebar.mvc.BaseView');
+goog.require('rebar.dialog.DialogInterface');
 goog.require('rebar.ext.bt.tpldialog');
 
 
 /**
  * 构造函数
  * @constructor
- * @extends {baidu.base.BaseView}
- * @implements {baidu.base.DialogInterface}
+ * @extends {rebar.mvc.BaseView}
+ * @implements {rebar.dialog.DialogInterface}
  * @desc Public实例变量成员 在这里定义
  */
 rebar.ext.bt.Dialog = function () {
-    baidu.base.BaseView.call(this);
+    rebar.mvc.BaseView.call(this);
 
     /**
      * @private
@@ -55,7 +55,7 @@ rebar.ext.bt.Dialog = function () {
      */
     this.cancelBtn_ = null;
 };
-goog.inherits(rebar.ext.bt.Dialog, baidu.base.BaseView);
+goog.inherits(rebar.ext.bt.Dialog, rebar.mvc.BaseView);
 
 /**
  * @enum {string}
@@ -246,7 +246,7 @@ rebar.ext.bt.Dialog.prototype.setup = function (title, content, showCancel, show
     this.removeChildren();
     if (argLength >= 2) {
         this.contentDom_.innerHTML = '';
-        if (content instanceof baidu.base.BaseView) {
+        if (content instanceof rebar.mvc.BaseView) {
             this.addChild(content, true);
         } else {
             this.contentDom_.innerHTML = content;

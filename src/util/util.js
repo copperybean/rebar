@@ -2,9 +2,9 @@
  * @fileoverview 工具集
  * @author wangshouchuang
  */
-goog.provide('baidu.base.util');
+goog.provide('rebar.util');
 
-goog.require('baidu.base.Const');
+goog.require('rebar.consts');
 
 goog.require('goog.crypt');
 goog.require('goog.crypt.Md5');
@@ -16,10 +16,10 @@ goog.require('goog.style');
 goog.require('goog.ui.IdGenerator');
 
 /**
- * @param {baidu.base.StateModel} state The state to be set.
+ * @param {rebar.model.StateModel} state The state to be set.
  */
-baidu.base.util.setGlobalState = function (state) {
-    baidu.base.pubSubInstance.publish(baidu.base.PubSubEvents.SetState, state);
+rebar.util.setGlobalState = function (state) {
+    rebar.consts.pubSubInstance.publish(rebar.consts.PubSubEvents.SetState, state);
 };
 
 /**
@@ -27,7 +27,7 @@ baidu.base.util.setGlobalState = function (state) {
  * @param {*} val
  * @return {boolean}
  */
-baidu.base.util.isNonemptyNum = function (val) {
+rebar.util.isNonemptyNum = function (val) {
     var formatedNum = /** @type {number} */(val) - 0;
     return !!(goog.isNumber(val) || (val && !isNaN(formatedNum)));
 };
@@ -38,7 +38,7 @@ baidu.base.util.isNonemptyNum = function (val) {
  * @param {string} attr
  * @param {function (string, Element):boolean} callback 回调函数，返回true表示继续遍历，否则遍历停止
  */
-baidu.base.util.searchUpAttr = function (dom, attr, callback) {
+rebar.util.searchUpAttr = function (dom, attr, callback) {
     var checkProc = function (el) {
         var val = el.getAttribute(attr);
         return callback.call(null, val, el);
@@ -59,9 +59,9 @@ baidu.base.util.searchUpAttr = function (dom, attr, callback) {
  * @param {string} attr The attr
  * @return {Element}
  */
-baidu.base.util.getUpwardsAttrDom = function (dom, attr) {
+rebar.util.getUpwardsAttrDom = function (dom, attr) {
     var ret = null;
-    baidu.base.util.searchUpAttr(dom, attr, function (val, el) {
+    rebar.util.searchUpAttr(dom, attr, function (val, el) {
         ret = el;
         return false;
     });
@@ -73,7 +73,7 @@ baidu.base.util.getUpwardsAttrDom = function (dom, attr) {
  * @param {Element} element
  * @return {boolean}
  */
-baidu.base.util.isElBottomVisible = function (element) {
+rebar.util.isElBottomVisible = function (element) {
     var pos = goog.style.getPageOffset(element);
     var visibleRect = goog.style.getVisibleRectForElement(element);
     var size = goog.style.getSize(element);
@@ -84,11 +84,11 @@ baidu.base.util.isElBottomVisible = function (element) {
  * 将毫秒格式的时间格式化为人容易阅读的形式
  * @param {number} milliSec
  * @param {number=} minUnit 最小单位，默认是秒
- * @param {number.<baidu.base.util.TimeUnit>=} unitNumberKeep 保留的单位数，默认2
+ * @param {number.<rebar.util.TimeUnit>=} unitNumberKeep 保留的单位数，默认2
  * @return {string}
  */
-baidu.base.util.timeDes = function (milliSec, minUnit, unitNumberKeep) {
-    minUnit = goog.isNumber(minUnit) ? minUnit : baidu.base.util.TimeUnit.Second;
+rebar.util.timeDes = function (milliSec, minUnit, unitNumberKeep) {
+    minUnit = goog.isNumber(minUnit) ? minUnit : rebar.util.TimeUnit.Second;
     unitNumberKeep = goog.isNumber(unitNumberKeep) ? unitNumberKeep : 2;
     var unitScale = [1000, 60, 60, 24, milliSec + 1];
     var unitDes = ['毫秒', '秒', '分', '小时', '天'];
@@ -112,7 +112,7 @@ baidu.base.util.timeDes = function (milliSec, minUnit, unitNumberKeep) {
  * 值定义为从0起逐渐增加1
  * @enum
  */
-baidu.base.util.TimeUnit = {
+rebar.util.TimeUnit = {
     MilliSecond: 0,
     Second: 1,
     Minute: 2,
@@ -125,7 +125,7 @@ baidu.base.util.TimeUnit = {
  * @param {string=} html
  * @return {Element}
  */
-baidu.base.util.htmlToElement = function (html) {
+rebar.util.htmlToElement = function (html) {
     var node = goog.dom.htmlToDocumentFragment(html || '');
     if (node.nodeType === goog.dom.NodeType.ELEMENT) {
         return /** @type {Element} */(node);
@@ -141,29 +141,29 @@ baidu.base.util.htmlToElement = function (html) {
  * @param {string=} value
  * @return {string}
  */
-baidu.base.util.attrSelector = function (attr, value) {
+rebar.util.attrSelector = function (attr, value) {
     return '[' + attr + (goog.isDef(value) ? '="' + value + '"' : '') + ']';
 };
 
 /**
  * 需给要检查输入的元素添加值为检查正则表达式的属性
- * baidu.base.DomConst.AttrCheckerReg（data-reg）或者传入检查正则表达式。
- * baidu.base.DomConst.AttrCheckerErrMsg（data-error-msg）
+ * rebar.consts.DomConst.AttrCheckerReg（data-reg）或者传入检查正则表达式。
+ * rebar.consts.DomConst.AttrCheckerErrMsg（data-error-msg）
  * 属性的值为检查失败时的错误提示。
- * baidu.base.DomConst.AttrCheckerErrId（data-error-id）
+ * rebar.consts.DomConst.AttrCheckerErrId（data-error-id）
  * 属性指定显示错误提示的元素的id。
- * 推荐在soy里用baidu.base.DomConst里定义的枚举而不是直接使用字符串。
+ * 推荐在soy里用rebar.consts.DomConst里定义的枚举而不是直接使用字符串。
  *
  * @param {Element} inputDom
  * @param {function (Element)=} optAdditionalChecker 可以传入一个检查函数。
  * @param {string=} optRegStr
  * @return {boolean}
  */
-baidu.base.util.checkInput = function (
+rebar.util.checkInput = function (
     inputDom, optAdditionalChecker, optRegStr) {
     // 校验
     var reg = optRegStr
-        || inputDom.getAttribute(baidu.base.DomConst.AttrCheckerReg);
+        || inputDom.getAttribute(rebar.consts.DomConst.AttrCheckerReg);
     if (!reg) {
         return true;
     }
@@ -179,12 +179,12 @@ baidu.base.util.checkInput = function (
     }
 
     if (pass) {
-        baidu.base.util.removeError(inputDom);
+        rebar.util.removeError(inputDom);
     } else {
         if (additionalCheckerPassed) {
-            var msg = inputDom.getAttribute(baidu.base.DomConst.AttrCheckerErrMsg);
+            var msg = inputDom.getAttribute(rebar.consts.DomConst.AttrCheckerErrMsg);
             var errorTip = msg || inputDom.placeholder;
-            baidu.base.util.addError(inputDom, errorTip, true);
+            rebar.util.addError(inputDom, errorTip, true);
         }
         inputDom.focus();
     }
@@ -196,14 +196,14 @@ baidu.base.util.checkInput = function (
  * @type {Object.<string, boolean>}
  * @private
  */
-baidu.base.util.inputErrorAvoidClasseSet_ = {};
+rebar.util.inputErrorAvoidClasseSet_ = {};
 
 /**
  * @param {Array.<string>} classes The classes to avoid.
  */
-baidu.base.util.addInputErrorAvoidClassSet = function (classes) {
+rebar.util.addInputErrorAvoidClassSet = function (classes) {
     goog.array.forEach(classes, function (el) {
-        baidu.base.util.inputErrorAvoidClasseSet_[el] = true;
+        rebar.util.inputErrorAvoidClasseSet_[el] = true;
     });
 };
 
@@ -212,9 +212,9 @@ baidu.base.util.addInputErrorAvoidClassSet = function (classes) {
  * @return {Element}
  * @private
  */
-baidu.base.util.getInputErrorDom_ = function (el) {
+rebar.util.getInputErrorDom_ = function (el) {
     var clsChecker = function (c) {
-        return !!baidu.base.util.inputErrorAvoidClasseSet_[c];
+        return !!rebar.util.inputErrorAvoidClasseSet_[c];
     };
     for (; el; el = el.parentElement) {
         if (goog.dom.TagName.DIV === el.tagName
@@ -229,18 +229,18 @@ baidu.base.util.getInputErrorDom_ = function (el) {
  * 删除由于checkInput检查失败显示的错误信息。
  * @param {Element} inputDom
  */
-baidu.base.util.removeError = function (inputDom) {
-    var parentDiv = baidu.base.util.getInputErrorDom_(inputDom);
+rebar.util.removeError = function (inputDom) {
+    var parentDiv = rebar.util.getInputErrorDom_(inputDom);
     if (!parentDiv) {
         return;
     }
-    var id = inputDom.getAttribute(baidu.base.DomConst.AttrCheckerErrId);
+    var id = inputDom.getAttribute(rebar.consts.DomConst.AttrCheckerErrId);
     var errorEl = document.getElementById(id);
     errorEl && errorEl.remove();
-    inputDom.removeAttribute(baidu.base.DomConst.AttrCheckerErrId);
+    inputDom.removeAttribute(rebar.consts.DomConst.AttrCheckerErrId);
     if (!goog.dom.getElementByClass(
-        baidu.base.DomConst.ClsCheckerErrMsg, parentDiv)) {
-        goog.dom.classes.remove(parentDiv, baidu.base.DomConst.ClsCheckerHasError);
+        rebar.consts.DomConst.ClsCheckerErrMsg, parentDiv)) {
+        goog.dom.classes.remove(parentDiv, rebar.consts.DomConst.ClsCheckerHasError);
     }
 };
 
@@ -250,10 +250,10 @@ baidu.base.util.removeError = function (inputDom) {
  * @param {string} errorTip
  * @param {boolean=} optIsOverwrite
  */
-baidu.base.util.addError = function (inputDom, errorTip, optIsOverwrite) {
-    var id = inputDom.getAttribute(baidu.base.DomConst.AttrCheckerErrId);
+rebar.util.addError = function (inputDom, errorTip, optIsOverwrite) {
+    var id = inputDom.getAttribute(rebar.consts.DomConst.AttrCheckerErrId);
     var el = null;
-    var parentDiv = baidu.base.util.getInputErrorDom_(inputDom);
+    var parentDiv = rebar.util.getInputErrorDom_(inputDom);
 
     if (!parentDiv) {
         return;
@@ -264,13 +264,13 @@ baidu.base.util.addError = function (inputDom, errorTip, optIsOverwrite) {
         document.getElementById(id).remove();
     }
 
-    goog.dom.classes.add(parentDiv, baidu.base.DomConst.ClsCheckerHasError);
+    goog.dom.classes.add(parentDiv, rebar.consts.DomConst.ClsCheckerHasError);
     id = goog.ui.IdGenerator.getInstance().getNextUniqueId();
     el = goog.dom.createDom(goog.dom.TagName.SPAN,
-                            baidu.base.DomConst.ClsCheckerErrMsg,
+                            rebar.consts.DomConst.ClsCheckerErrMsg,
                             errorTip);
     el.id = id;
-    inputDom.setAttribute(baidu.base.DomConst.AttrCheckerErrId, id);
+    inputDom.setAttribute(rebar.consts.DomConst.AttrCheckerErrId, id);
     if (!errorTip) {
         goog.style.showElement(el, false);
     }
@@ -286,7 +286,7 @@ baidu.base.util.addError = function (inputDom, errorTip, optIsOverwrite) {
  * @param {number=} bottomDiff
  * @return {boolean}
  */
-baidu.base.util.scrolledToBottom = function (scrollDom, bottomDiff) {
+rebar.util.scrolledToBottom = function (scrollDom, bottomDiff) {
     return !!scrollDom
         && (scrollDom.scrollTop + goog.style.getSize(scrollDom).height
         - (bottomDiff || 0) >= scrollDom.scrollHeight);
@@ -297,7 +297,7 @@ baidu.base.util.scrolledToBottom = function (scrollDom, bottomDiff) {
  * @param {string=} format
  * @return {number}
  */
-baidu.base.util.dateStrToSeconds = function (dateStr, format) {
+rebar.util.dateStrToSeconds = function (dateStr, format) {
     var date = new Date();
     var parser = new goog.i18n.DateTimeParse(format || 'y-MM-dd HH:mm:ss');
     parser.parse(dateStr, date);
@@ -309,7 +309,7 @@ baidu.base.util.dateStrToSeconds = function (dateStr, format) {
  * @param {string=} format
  * @return {string}
  */
-baidu.base.util.secondsToDateStr = function (secondsTimestamp, format) {
+rebar.util.secondsToDateStr = function (secondsTimestamp, format) {
     var formatter = new goog.i18n.DateTimeFormat(format || 'y-MM-dd HH:mm:ss');
     return formatter.format(new Date(secondsTimestamp * 1000));
 };
@@ -320,7 +320,7 @@ baidu.base.util.secondsToDateStr = function (secondsTimestamp, format) {
  * @param {string} str
  * @return {string}
  */
-baidu.base.util.mysqlEscapeString = function (str) {
+rebar.util.mysqlEscapeString = function (str) {
     return str.replace(/[\u0000\u0008\u0009\u001a\n\r"'\\\%]/g, function (c) {
         switch (c) {
             case '\u0000':
@@ -349,7 +349,7 @@ baidu.base.util.mysqlEscapeString = function (str) {
  * @param {string} str
  * @param {string=} query
  */
-baidu.base.util.emphasizeQuery = function (str, query) {
+rebar.util.emphasizeQuery = function (str, query) {
     if (!query) {
         return str;
     }
@@ -362,7 +362,7 @@ baidu.base.util.emphasizeQuery = function (str, query) {
  * @param {string} str
  * @return {string}
  */
-baidu.base.util.hexMd5 = function (str) {
+rebar.util.hexMd5 = function (str) {
     var md5 = new goog.crypt.Md5();
     md5.update(str);
     return goog.crypt.byteArrayToHex(md5.digest());
@@ -376,14 +376,14 @@ baidu.base.util.hexMd5 = function (str) {
  *     如果不传,就和url param用一样的key。优先使用url参数里的值
  * @return {Object.<string, string>}
  */
-baidu.base.util.getUrlParamMap = function (url, optKeys, optCookieKeys) {
+rebar.util.getUrlParamMap = function (url, optKeys, optCookieKeys) {
     var uri = new goog.Uri(url);
     var queryData = uri.getQueryData();
     var ret = {};
 
     var cookieKeys = optCookieKeys || optKeys || [];
     goog.array.forEach(cookieKeys, function (key) {
-        var cookieVal = baidu.base.cookie.get(key);
+        var cookieVal = rebar.util.cookie.get(key);
         if (cookieVal) {
             ret[key] = cookieVal;
         }
@@ -404,7 +404,7 @@ baidu.base.util.getUrlParamMap = function (url, optKeys, optCookieKeys) {
  * @param {goog.Uri} uri The uri.
  * @param {Array.<string>} paths The paths
  */
-baidu.base.util.appendPath = function (uri, paths) {
+rebar.util.appendPath = function (uri, paths) {
     var uriPath = uri.getPath();
     goog.array.forEach(paths, function (p) {
         uriPath = goog.uri.utils.appendPath(uriPath, p);
@@ -418,9 +418,9 @@ baidu.base.util.appendPath = function (uri, paths) {
  * @param {Date} toDate to
  * @return {string} result
  */
-baidu.base.util.generateTimeDeltaString = function (startDate, toDate) {
+rebar.util.generateTimeDeltaString = function (startDate, toDate) {
     var deltaTime = Math.abs(toDate - startDate);
-    return baidu.base.util.timeDes(deltaTime, baidu.base.util.TimeUnit.Second);
+    return rebar.util.timeDes(deltaTime, rebar.util.TimeUnit.Second);
 };
 
 /**
@@ -429,15 +429,15 @@ baidu.base.util.generateTimeDeltaString = function (startDate, toDate) {
  * @param {string} type type
  * @return {string} result result
  */
-baidu.base.util.changeNumberTo = function (size, type) {
+rebar.util.changeNumberTo = function (size, type) {
     switch (type) {
-        case baidu.base.util.SizeUnit.SIZE_FORMAT_G:
+        case rebar.util.SizeUnit.SIZE_FORMAT_G:
             return (size / (1000 * 1000 * 1000)) + type;
-        case baidu.base.util.SizeUnit.SIZE_FORMAT_M:
+        case rebar.util.SizeUnit.SIZE_FORMAT_M:
             return (size / (1000 * 1000)) + type;
-        case baidu.base.util.SizeUnit.SIZE_FORMAT_K:
+        case rebar.util.SizeUnit.SIZE_FORMAT_K:
             return (size / (1000)) + type;
-        case baidu.base.util.SizeUnit.SIZE_FORMAT_B:
+        case rebar.util.SizeUnit.SIZE_FORMAT_B:
             return size + type;
     }
     return size + '';
@@ -447,7 +447,7 @@ baidu.base.util.changeNumberTo = function (size, type) {
 /**
  * @enum {string}
  */
-baidu.base.util.SizeUnit = {
+rebar.util.SizeUnit = {
     SIZE_FORMAT_B: 'B',
     SIZE_FORMAT_K: 'K',
     SIZE_FORMAT_M: 'M',

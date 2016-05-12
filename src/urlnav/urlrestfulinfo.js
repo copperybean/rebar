@@ -5,9 +5,9 @@
 /* jshint -W069 */
 /* eslint-disable fecs-properties-quote */
 /* eslint-disable fecs-dot-notation */
-goog.provide('baidu.base.UrlRestfulInfo');
+goog.provide('rebar.urlnav.UrlRestfulInfo');
 
-goog.require('baidu.base.BaseModel');
+goog.require('rebar.mvc.BaseModel');
 
 
 /**
@@ -15,10 +15,10 @@ goog.require('baidu.base.BaseModel');
  * @param {string} replaceTarget 被替换内容
  * @param {Object} fillMap 填充map，key:token，value:填充字符
  * @constructor
- * @extends {baidu.base.BaseModel}
+ * @extends {rebar.mvc.BaseModel}
  */
-baidu.base.UrlRestfulInfo = function (replaceTarget, fillMap) {
-    baidu.base.BaseModel.call(this);
+rebar.urlnav.UrlRestfulInfo = function (replaceTarget, fillMap) {
+    rebar.mvc.BaseModel.call(this);
 
     /**
      * @type {string|null} 被替换字符串
@@ -30,13 +30,13 @@ baidu.base.UrlRestfulInfo = function (replaceTarget, fillMap) {
      */
     this.fillMap = fillMap;
 };
-goog.inherits(baidu.base.UrlRestfulInfo, baidu.base.BaseModel);
+goog.inherits(rebar.urlnav.UrlRestfulInfo, rebar.mvc.BaseModel);
 
 /**
  * @override
  */
-baidu.base.UrlRestfulInfo.prototype.toJson = function () {
-    var ret = baidu.base.UrlRestfulInfo.superClass_.toJson.call(this);
+rebar.urlnav.UrlRestfulInfo.prototype.toJson = function () {
+    var ret = rebar.urlnav.UrlRestfulInfo.superClass_.toJson.call(this);
     ret['replaceTarget'] = this.replaceTarget;
     ret['fillMap'] = this.fillMap;
     return ret;
@@ -45,8 +45,8 @@ baidu.base.UrlRestfulInfo.prototype.toJson = function () {
 /**
  * @override
  */
-baidu.base.UrlRestfulInfo.prototype.initWitJson = function (obj) {
-    if (!baidu.base.UrlRestfulInfo.superClass_.initWitJson.call(this, obj)) {
+rebar.urlnav.UrlRestfulInfo.prototype.initWitJson = function (obj) {
+    if (!rebar.urlnav.UrlRestfulInfo.superClass_.initWitJson.call(this, obj)) {
         return false;
     }
     this.replaceTarget = obj['replaceTarget'] || this.replaceTarget;
@@ -60,7 +60,7 @@ baidu.base.UrlRestfulInfo.prototype.initWitJson = function (obj) {
  * @param {string} token token
  * @return {string} new uri
  */
-baidu.base.UrlRestfulInfo.prototype.generateUri = function (uri, token) {
+rebar.urlnav.UrlRestfulInfo.prototype.generateUri = function (uri, token) {
     if (this.fillMap && this.replaceTarget && uri) {
         if (goog.string.startsWith(token, '?')) {
             token = token.substr(1, token.length - 1);
@@ -104,7 +104,7 @@ baidu.base.UrlRestfulInfo.prototype.generateUri = function (uri, token) {
  * @return {Array}
  * @private
  */
-baidu.base.UrlRestfulInfo.prototype._parseReplaceTarget = function () {
+rebar.urlnav.UrlRestfulInfo.prototype._parseReplaceTarget = function () {
     if (!this.replaceTarget) {
         return [];
     }
@@ -115,7 +115,7 @@ baidu.base.UrlRestfulInfo.prototype._parseReplaceTarget = function () {
  * 从uri中截取二级目录，获取需要添加的token
  * @return {string} new token
  */
-baidu.base.UrlRestfulInfo.prototype.getTokenFromSubAddr = function () {
+rebar.urlnav.UrlRestfulInfo.prototype.getTokenFromSubAddr = function () {
     var uri = window.location.href;
     // 获取二级目录，如果没有二级目录，则返回空字符串
     var subAddr = this.getSubAddr_(uri);
@@ -146,7 +146,7 @@ baidu.base.UrlRestfulInfo.prototype.getTokenFromSubAddr = function () {
  * @return {string} uri uri
  * @private
  */
-baidu.base.UrlRestfulInfo.prototype.getSubAddr_ = function (uri) {
+rebar.urlnav.UrlRestfulInfo.prototype.getSubAddr_ = function (uri) {
     if (goog.string.startsWith(uri, 'http')) {
         var localList1 = uri.split('/');
         if (localList1.length >= 4) {

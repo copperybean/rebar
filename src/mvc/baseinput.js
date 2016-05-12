@@ -2,22 +2,22 @@
  * @fileoverview 所有自定义输入的基类
  * @author wangshouchuang
  */
-goog.provide('baidu.base.BaseInput');
+goog.provide('rebar.mvc.BaseInput');
 
-goog.require('baidu.base.BaseView');
+goog.require('rebar.mvc.BaseView');
 
 goog.require('goog.object');
 
 /**
  * 构造函数
  * @constructor
- * @extends {baidu.base.BaseView}
+ * @extends {rebar.mvc.BaseView}
  */
-baidu.base.BaseInput = function () {
-    baidu.base.BaseView.call(this);
+rebar.mvc.BaseInput = function () {
+    rebar.mvc.BaseView.call(this);
 
     /**
-     * @type {?function (baidu.base.BaseInput)}
+     * @type {?function (rebar.mvc.BaseInput)}
      * @private
      */
     this.contentChangeCallback_ = null;
@@ -28,13 +28,13 @@ baidu.base.BaseInput = function () {
      */
     this.domChangeListened_ = false;
 };
-goog.inherits(baidu.base.BaseInput, baidu.base.BaseView);
+goog.inherits(rebar.mvc.BaseInput, rebar.mvc.BaseView);
 
 /**
  * 设置控件的值
  * @param {string} value
  */
-baidu.base.BaseInput.prototype.setValue = function (value) {
+rebar.mvc.BaseInput.prototype.setValue = function (value) {
     return '';
 };
 
@@ -42,14 +42,14 @@ baidu.base.BaseInput.prototype.setValue = function (value) {
  * 获取控件的值
  * @return {string}
  */
-baidu.base.BaseInput.prototype.getValue = function () {
+rebar.mvc.BaseInput.prototype.getValue = function () {
     return '';
 };
 
 /**
- * @param {function (baidu.base.BaseInput)} callback
+ * @param {function (rebar.mvc.BaseInput)} callback
  */
-baidu.base.BaseInput.prototype.setChangeCallback = function (callback) {
+rebar.mvc.BaseInput.prototype.setChangeCallback = function (callback) {
     this.contentChangeCallback_ = callback;
     if (this.isInDocument() && !this.domChangeListened_
         && this.shouldListenDomChange()) {
@@ -61,8 +61,8 @@ baidu.base.BaseInput.prototype.setChangeCallback = function (callback) {
 /**
  * @override
  */
-baidu.base.BaseInput.prototype.enterDocument = function () {
-    baidu.base.BaseInput.superClass_.enterDocument.call(this);
+rebar.mvc.BaseInput.prototype.enterDocument = function () {
+    rebar.mvc.BaseInput.superClass_.enterDocument.call(this);
     if (this.shouldListenDomChange()) {
         this.listenDomChange();
         this.domChangeListened_ = true;
@@ -74,7 +74,7 @@ baidu.base.BaseInput.prototype.enterDocument = function () {
 /**
  * @protected
  */
-baidu.base.BaseInput.prototype.listenDomChange = function () {
+rebar.mvc.BaseInput.prototype.listenDomChange = function () {
     // do nothing in base class
 };
 
@@ -82,14 +82,14 @@ baidu.base.BaseInput.prototype.listenDomChange = function () {
  * @return {boolean}
  * @protected
  */
-baidu.base.BaseInput.prototype.shouldListenDomChange = function () {
+rebar.mvc.BaseInput.prototype.shouldListenDomChange = function () {
     return !!this.contentChangeCallback_;
 };
 
 /**
  * @protected
  */
-baidu.base.BaseInput.prototype.contentChange = function () {
+rebar.mvc.BaseInput.prototype.contentChange = function () {
     if (this.contentChangeCallback_) {
         this.contentChangeCallback_.call(window, this);
     }

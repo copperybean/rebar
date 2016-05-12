@@ -2,7 +2,7 @@
  * @fileoverview 管理浏览器历史信息的类
  * @author hector<zzh-83@163.com>
  */
-goog.provide('baidu.base.History');
+goog.provide('rebar.urlnav.History');
 
 goog.require('goog.history.EventType');
 goog.require('goog.Uri');
@@ -19,11 +19,11 @@ goog.require('goog.history.Html5History.TokenTransformer');
  * organized as key value pairs, the key and value is connected with "=", and
  * the different key value pairs are divided by "&".
  * So, if you set the history token directly by function
- * baidu.base.History.prototype.setToken, please use the principle above.
+ * rebar.urlnav.History.prototype.setToken, please use the principle above.
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-baidu.base.History = function () {
+rebar.urlnav.History = function () {
     goog.events.EventTarget.call(this);
     /**
      * @type {goog.history.Html5History}
@@ -55,8 +55,8 @@ baidu.base.History = function () {
      */
     this.syncUriToken_ = null;
 };
-goog.inherits(baidu.base.History, goog.events.EventTarget);
-goog.addSingletonGetter(baidu.base.History);
+goog.inherits(rebar.urlnav.History, goog.events.EventTarget);
+goog.addSingletonGetter(rebar.urlnav.History);
 
 /**
  * Set a new key value pair and replace the old value.
@@ -65,7 +65,7 @@ goog.addSingletonGetter(baidu.base.History);
  * @param {*=} value If the first parameter is Object, this one will be
  *        ignored.
  */
-baidu.base.History.prototype.setTokenItem = function (keyOrMap, value) {
+rebar.urlnav.History.prototype.setTokenItem = function (keyOrMap, value) {
     this.setInternalToken_(keyOrMap, value);
     this.setToken_(this.getUniformToken_());
 };
@@ -74,10 +74,10 @@ baidu.base.History.prototype.setTokenItem = function (keyOrMap, value) {
  * Update the key value pair in history token and replace the old value.
  * {@see goog.history.History.prototype.replaceToken}
  * @param {string|Object} keyOrMap
- *      {@see baidu.base.History.prototype.setTokenItem}.
- * @param {*=} value {@see baidu.base.History.prototype.setTokenItem}.
+ *      {@see rebar.urlnav.History.prototype.setTokenItem}.
+ * @param {*=} value {@see rebar.urlnav.History.prototype.setTokenItem}.
  */
-baidu.base.History.prototype.replaceTokenItem = function (keyOrMap,
+rebar.urlnav.History.prototype.replaceTokenItem = function (keyOrMap,
     value) {
     this.setInternalToken_(keyOrMap, value);
     this.replaceToken_(this.getUniformToken_());
@@ -89,7 +89,7 @@ baidu.base.History.prototype.replaceTokenItem = function (keyOrMap,
  *        an array of keys.
  * @param {boolean=} replace To replace corresponding token or not.
  */
-baidu.base.History.prototype.removeTokenItem = function (key, replace) {
+rebar.urlnav.History.prototype.removeTokenItem = function (key, replace) {
     if (goog.isArray(key)) {
         for (var i in key) {
             this.tokenQuery_.remove(key[i]);
@@ -110,7 +110,7 @@ baidu.base.History.prototype.removeTokenItem = function (key, replace) {
  *          exist.
  * @return {*} The first value associated with the key.
  */
-baidu.base.History.prototype.getTokenValue = function (key, defaultVal) {
+rebar.urlnav.History.prototype.getTokenValue = function (key, defaultVal) {
     return this.tokenQuery_.get(key, this.originalQuery_.get(key, defaultVal));
 };
 
@@ -118,7 +118,7 @@ baidu.base.History.prototype.getTokenValue = function (key, defaultVal) {
  * Get all values
  * @return {Object}
  */
-baidu.base.History.prototype.getUrlParams = function () {
+rebar.urlnav.History.prototype.getUrlParams = function () {
     var ret = {};
     var keys = this.tokenQuery_.getKeys();
     for (var i in keys) {
@@ -133,7 +133,7 @@ baidu.base.History.prototype.getUrlParams = function () {
  * @param {string=} title Optional title to associate with history entry.
  * TODO check what this title is really used to.
  */
-baidu.base.History.prototype.setToken = function (token, title) {
+rebar.urlnav.History.prototype.setToken = function (token, title) {
     if (goog.isString(token)) {
         this.tokenQuery_ = new goog.Uri.QueryData(token + '');
     } else {
@@ -148,7 +148,7 @@ baidu.base.History.prototype.setToken = function (token, title) {
  * @param {string|Object} token The history state identifier.
  * @param {string=} title Optional title to associate with history entry.
  */
-baidu.base.History.prototype.replaceToken = function (token, title) {
+rebar.urlnav.History.prototype.replaceToken = function (token, title) {
     if (goog.isString(token)) {
         this.tokenQuery_ = new goog.Uri.QueryData(token + '');
     } else {
@@ -160,10 +160,10 @@ baidu.base.History.prototype.replaceToken = function (token, title) {
 /**
  * Set the internal token
  * @param {string|Object} keyOrMap
- *      {@see baidu.base.History.prototype.setTokenItem}
- * @param {*=} value {@see baidu.base.History.prototype.setTokenItem}.
+ *      {@see rebar.urlnav.History.prototype.setTokenItem}
+ * @param {*=} value {@see rebar.urlnav.History.prototype.setTokenItem}.
  */
-baidu.base.History.prototype.setInternalToken_ = function (keyOrMap, value) {
+rebar.urlnav.History.prototype.setInternalToken_ = function (keyOrMap, value) {
     if (goog.isObject(keyOrMap)) {
         for (var key in keyOrMap) {
             this.tokenQuery_.set(key, keyOrMap[key]);
@@ -177,7 +177,7 @@ baidu.base.History.prototype.setInternalToken_ = function (keyOrMap, value) {
  * @return {string} The uniform token.
  * @private
  */
-baidu.base.History.prototype.getUniformToken_ = function () {
+rebar.urlnav.History.prototype.getUniformToken_ = function () {
     var token = this.tokenQuery_.toString();
     var keyValues = token.split('&');
     keyValues.sort();
@@ -188,7 +188,7 @@ baidu.base.History.prototype.getUniformToken_ = function () {
  * The navigate event listener.
  * @param {goog.history.Event} event The history event.
  */
-baidu.base.History.prototype.onNavigate_ = function (event) {
+rebar.urlnav.History.prototype.onNavigate_ = function (event) {
     if (event.isNavigation) {
         this.tokenQuery_ = new goog.Uri.QueryData(this.getToken_());
     }
@@ -200,13 +200,13 @@ baidu.base.History.prototype.onNavigate_ = function (event) {
  * @return {goog.history.Html5History}
  * @private
  */
-baidu.base.History.prototype.getHtml5History_ = function () {
+rebar.urlnav.History.prototype.getHtml5History_ = function () {
     if (!goog.history.Html5History.isSupported()) {
         return null;
     }
     var transformer = this.uriGenerator_ === undefined || this.uriGenerator_ === null ?
-                    new baidu.base.History.TokenTransformer() :
-                    new baidu.base.History.TokenTransformer(this.uriGenerator_);
+                    new rebar.urlnav.History.TokenTransformer() :
+                    new rebar.urlnav.History.TokenTransformer(this.uriGenerator_);
     var ret = new goog.history.Html5History(
               window, transformer);
     ret.setUseFragment(false);
@@ -221,7 +221,7 @@ baidu.base.History.prototype.getHtml5History_ = function () {
  * @return {string}
  * @private
  */
-baidu.base.History.prototype.getToken_ = function () {
+rebar.urlnav.History.prototype.getToken_ = function () {
     return this.html5History_ ? this.html5History_.getToken() : '';
 };
 
@@ -230,7 +230,7 @@ baidu.base.History.prototype.getToken_ = function () {
  * @param {string=} optTitle The optional title
  * @private
  */
-baidu.base.History.prototype.setToken_ = function (token, optTitle) {
+rebar.urlnav.History.prototype.setToken_ = function (token, optTitle) {
     this.html5History_ && this.html5History_.setToken(token, optTitle);
 };
 
@@ -239,7 +239,7 @@ baidu.base.History.prototype.setToken_ = function (token, optTitle) {
  * @param {string=} optTitle The optional title
  * @private
  */
-baidu.base.History.prototype.replaceToken_ = function (token, optTitle) {
+rebar.urlnav.History.prototype.replaceToken_ = function (token, optTitle) {
     this.html5History_ && this.html5History_.replaceToken(token, optTitle);
 };
 
@@ -247,7 +247,7 @@ baidu.base.History.prototype.replaceToken_ = function (token, optTitle) {
  * set uri generator
  * @param {function(string, string): string} uriGenerator callback to generate uri
  */
-baidu.base.History.prototype.setUriGenerator = function (uriGenerator) {
+rebar.urlnav.History.prototype.setUriGenerator = function (uriGenerator) {
     this.uriGenerator_ = uriGenerator;
     this.html5History_ = this.getHtml5History_();
 };
@@ -256,23 +256,23 @@ baidu.base.History.prototype.setUriGenerator = function (uriGenerator) {
  * set syncUriToken callback
  * @param {function(): string} syncUriTokenCallback callback to sync token
  */
-baidu.base.History.prototype.setSyncUriTokenCallback = function (syncUriTokenCallback) {
+rebar.urlnav.History.prototype.setSyncUriTokenCallback = function (syncUriTokenCallback) {
     this.syncUriToken_ = syncUriTokenCallback;
 };
 
 /**
  * @inheritDoc
  */
-baidu.base.History.prototype.disposeInternal = function () {
+rebar.urlnav.History.prototype.disposeInternal = function () {
     this.html5History_ && this.html5History_.dispose();
 
-    baidu.base.History.superClass_.disposeInternal.call(this);
+    rebar.urlnav.History.superClass_.disposeInternal.call(this);
 };
 
 /**
  * synchronize token from uri
  */
-baidu.base.History.prototype.syncTokenFromUri = function () {
+rebar.urlnav.History.prototype.syncTokenFromUri = function () {
     if (this.syncUriToken_) {
         var token = this.syncUriToken_();
         if (token) {
@@ -288,14 +288,14 @@ baidu.base.History.prototype.syncTokenFromUri = function () {
  * @constructor
  * @implements {goog.history.Html5History.TokenTransformer}
  */
-baidu.base.History.TokenTransformer = function (optUriGenerator) {
+rebar.urlnav.History.TokenTransformer = function (optUriGenerator) {
     this.uriGenerator_ = optUriGenerator;
 };
 
 /**
  * @override
  */
-baidu.base.History.TokenTransformer.prototype.retrieveToken = function (pathPrefix,
+rebar.urlnav.History.TokenTransformer.prototype.retrieveToken = function (pathPrefix,
     location) {
     return location.search.replace(/^\?+/, '');
 };
@@ -303,7 +303,7 @@ baidu.base.History.TokenTransformer.prototype.retrieveToken = function (pathPref
 /**
  * @override
  */
-baidu.base.History.TokenTransformer.prototype.createUrl = function (token, pathPrefix, location) {
+rebar.urlnav.History.TokenTransformer.prototype.createUrl = function (token, pathPrefix, location) {
     var ret = window.location.href.replace(/(\?.*?)*(#(.*)|$)/,
         goog.partial(function (token, match, p1, p2, p3) {
             return (token ? '?' + token : '') + (p3 ? p2 : '');

@@ -3,7 +3,7 @@
  *
  * @author hector<zzh-83@163.com>
  */
-goog.provide('baidu.base.Const');
+goog.provide('rebar.consts');
 
 goog.require('goog.pubsub.PubSub');
 goog.require('goog.userAgent');
@@ -12,12 +12,12 @@ goog.require('goog.userAgent');
  * @type {goog.pubsub.PubSub}
  * @const
  */
-baidu.base.pubSubInstance = new goog.pubsub.PubSub();
+rebar.consts.pubSubInstance = new goog.pubsub.PubSub();
 
 /**
  * @enum {string}
  */
-baidu.base.PubSubEvents = {
+rebar.consts.PubSubEvents = {
     UpdateState: 'updateState',
     SetState: 'setState'
 };
@@ -25,32 +25,21 @@ baidu.base.PubSubEvents = {
 /**
  * @enum {string}
  */
-baidu.base.DomConst = {
+rebar.consts.DomConst = {
     AttrCheckerReg: 'data-reg',
     AttrCheckerErrMsg: 'data-error-msg',
     AttrCheckerErrId: 'data-error-id',
     ClsCheckerHasError: 'has-error',
-    ClsCheckerErrMsg: 'checkerrmsgItem'
-};
+    ClsCheckerErrMsg: 'checkerrmsgItem',
 
-/**
- * 定义一些服务器的错误码，和phpbase中的对应
- * @enum
- */
-baidu.base.ServerStatusCode = {
-    SUCCESS: 0,
-    ERROR: 1,
-    INVALID_REQUEST_PARAM: 2,
-    BACKEND_UNAVAILABLE: 3,
-    BACKEND_BUSY: 4,
-    BACKEND_ERROR: 5
+    SEMANTICUI_SEARCHINPUT_ITEMS: 'suisinput'
 };
 
 /**
  * @return {string}
  * @private
  */
-baidu.base.Const.getAniNamePrefix_ = function () {
+rebar.consts.getAniNamePrefix_ = function () {
     if (goog.userAgent.WEBKIT) {
         return 'webkit';
     }
@@ -69,18 +58,9 @@ baidu.base.Const.getAniNamePrefix_ = function () {
 /**
  * @enum {string}
  */
-baidu.base.Const.AnimationEvents = {
-    AnimationStart: baidu.base.Const.getAniNamePrefix_() + 'AnimationStart',
-    AnimationIteration: baidu.base.Const.getAniNamePrefix_() + 'AnimationIteration',
-    AnimationEnd: baidu.base.Const.getAniNamePrefix_() + 'AnimationEnd'
-};
-
-/**
- * 有些其他插件对应的js(比如bootstrap以及semanticui对应的插件)不是会被全部包含的
- * 但是他们会引用公共的soy, 这样会导致对于常量的引用出现以来问题, 所以干脆定义在这里
- * @enum {string}
- */
-baidu.base.Const.DomConst = {
-    SEMANTICUI_SEARCHINPUT_ITEMS: 'suisinput'
+rebar.consts.AnimationEvents = {
+    AnimationStart: rebar.consts.getAniNamePrefix_() + 'AnimationStart',
+    AnimationIteration: rebar.consts.getAniNamePrefix_() + 'AnimationIteration',
+    AnimationEnd: rebar.consts.getAniNamePrefix_() + 'AnimationEnd'
 };
 

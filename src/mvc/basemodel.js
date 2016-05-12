@@ -6,7 +6,7 @@
 /* eslint-disable fecs-properties-quote */
 /* eslint-disable fecs-dot-notation */
 /* eslint-disable new-cap */
-goog.provide('baidu.base.BaseModel');
+goog.provide('rebar.mvc.BaseModel');
 
 goog.require('goog.json');
 
@@ -39,7 +39,7 @@ goog.require('goog.json');
  *
  * @constructor
  */
-baidu.base.BaseModel = function () {
+rebar.mvc.BaseModel = function () {
 };
 
 /**
@@ -56,14 +56,14 @@ baidu.base.BaseModel = function () {
  *
  * @return {Object}
  */
-baidu.base.BaseModel.prototype.toJson = function () {
+rebar.mvc.BaseModel.prototype.toJson = function () {
     return {};
 };
 
 /**
  * @return {string}
  */
-baidu.base.BaseModel.prototype.toJsonString = function () {
+rebar.mvc.BaseModel.prototype.toJsonString = function () {
     return goog.json.serialize(this.toJson());
 };
 
@@ -83,65 +83,65 @@ baidu.base.BaseModel.prototype.toJsonString = function () {
  * @param {Object} obj The object used to initialize.
  * @return {boolean} 返回true表示init成功
  */
-baidu.base.BaseModel.prototype.initWitJson = function (obj) {
+rebar.mvc.BaseModel.prototype.initWitJson = function (obj) {
     // do nothing in base class
     return !!obj;
 };
 
 /**
  * 克隆对象
- * @return {baidu.base.BaseModel}
+ * @return {rebar.mvc.BaseModel}
  */
-baidu.base.BaseModel.prototype.clone = function () {
+rebar.mvc.BaseModel.prototype.clone = function () {
     var model = new this.constructor();
     model.initWitJson(this.toJson());
     return model;
 };
 
 /**
- * Initialize a list of object derrived from baidu.base.BaseModel
+ * Initialize a list of object derrived from rebar.mvc.BaseModel
  * @see initWitJson
  * @param {Array|Object} objList
  * @param {Function=} ctor The constructor
- * @return {Array.<baidu.base.BaseModel>}
+ * @return {Array.<rebar.mvc.BaseModel>}
  */
-baidu.base.BaseModel.prototype.initList = function (objList, ctor) {
-    return baidu.base.BaseModel.initList(objList, ctor || this.constructor);
+rebar.mvc.BaseModel.prototype.initList = function (objList, ctor) {
+    return rebar.mvc.BaseModel.initList(objList, ctor || this.constructor);
 };
 
 /**
  * @see toJson
- * @param {Array.<baidu.base.BaseModel>} list
+ * @param {Array.<rebar.mvc.BaseModel>} list
  * @return {Array.<Object>}
  */
-baidu.base.BaseModel.prototype.listToJson = function (list) {
-    return baidu.base.BaseModel.listToJson(list);
+rebar.mvc.BaseModel.prototype.listToJson = function (list) {
+    return rebar.mvc.BaseModel.listToJson(list);
 };
 
 /**
  * @param {Array.<Object>} list
- * @param {baidu.base.KVDefinition} kvDef
+ * @param {rebar.mvc.KVDefinition} kvDef
  * @return {Object.<string, *>}
  */
-baidu.base.BaseModel.prototype.initMapWithKVList = function (list, kvDef) {
-    return baidu.base.BaseModel.initMapWithKVList(list, kvDef);
+rebar.mvc.BaseModel.prototype.initMapWithKVList = function (list, kvDef) {
+    return rebar.mvc.BaseModel.initMapWithKVList(list, kvDef);
 };
 
 /**
  * @param {Object.<string, *>} map
- * @param {baidu.base.KVDefinition} kvDef
+ * @param {rebar.mvc.KVDefinition} kvDef
  * @return {Array.<Object>}
  */
-baidu.base.BaseModel.prototype.mapToKVListJson = function (map, kvDef) {
-    return baidu.base.BaseModel.mapToKVListJson(map, kvDef);
+rebar.mvc.BaseModel.prototype.mapToKVListJson = function (map, kvDef) {
+    return rebar.mvc.BaseModel.mapToKVListJson(map, kvDef);
 };
 
 /**
  * @see toJson
- * @param {Array.<baidu.base.BaseModel>} list
+ * @param {Array.<rebar.mvc.BaseModel>} list
  * @return {Array.<Object>}
  */
-baidu.base.BaseModel.listToJson = function (list) {
+rebar.mvc.BaseModel.listToJson = function (list) {
     var ret = [];
     goog.array.forEach(list || [], function (item) {
         ret.push(item.toJson());
@@ -151,12 +151,12 @@ baidu.base.BaseModel.listToJson = function (list) {
 
 /**
  * @see initWitJson
- * Initialize a list of object derrived from baidu.base.BaseModel
+ * Initialize a list of object derrived from rebar.mvc.BaseModel
  * @param {Array|Object} objList
  * @param {Function} ctor The constructor
- * @return {Array.<baidu.base.BaseModel>}
+ * @return {Array.<rebar.mvc.BaseModel>}
  */
-baidu.base.BaseModel.initList = function (objList, ctor) {
+rebar.mvc.BaseModel.initList = function (objList, ctor) {
     var ret = [];
     goog.object.forEach(objList || [], function (obj) {
         var info = new ctor();
@@ -168,10 +168,10 @@ baidu.base.BaseModel.initList = function (objList, ctor) {
 
 /**
  * @param {Array.<Object>} list
- * @param {baidu.base.KVDefinition} kvDef
+ * @param {rebar.mvc.KVDefinition} kvDef
  * @return {Object.<string, *>}
  */
-baidu.base.BaseModel.initMapWithKVList = function (list, kvDef) {
+rebar.mvc.BaseModel.initMapWithKVList = function (list, kvDef) {
     var ret = {};
     if (!list) {
         return ret;
@@ -184,10 +184,10 @@ baidu.base.BaseModel.initMapWithKVList = function (list, kvDef) {
 
 /**
  * @param {Object.<string, *>} map
- * @param {baidu.base.KVDefinition} kvDef
+ * @param {rebar.mvc.KVDefinition} kvDef
  * @return {Array.<Object>}
  */
-baidu.base.BaseModel.mapToKVListJson = function (map, kvDef) {
+rebar.mvc.BaseModel.mapToKVListJson = function (map, kvDef) {
     var ret = [];
     if (!map) {
         return ret;
@@ -204,7 +204,7 @@ baidu.base.BaseModel.mapToKVListJson = function (map, kvDef) {
 /**
  * @constructor
  */
-baidu.base.BaseModel.CachedFetcher = function () {
+rebar.mvc.BaseModel.CachedFetcher = function () {
 
     /**
      * @type {Object.<string, *>}
@@ -230,7 +230,7 @@ baidu.base.BaseModel.CachedFetcher = function () {
  * @param {function(boolean, *)} callback The callback function used when data ready.
  * @param {boolean=} optRefresh Whether to refres.
  */
-baidu.base.BaseModel.CachedFetcher.prototype.getByKey = function (
+rebar.mvc.BaseModel.CachedFetcher.prototype.getByKey = function (
     fetcher, key, callback, optRefresh) {
     if (!optRefresh && this.cachedData_.hasOwnProperty(key)) {
         callback.call(null, true, this.cachedData_[key]);
@@ -260,7 +260,7 @@ baidu.base.BaseModel.CachedFetcher.prototype.getByKey = function (
  * @param {string} valName
  * @constructor
  */
-baidu.base.KVDefinition = function (keyName, valName) {
+rebar.mvc.KVDefinition = function (keyName, valName) {
     /**
      * @type {string}
      * @private
@@ -277,14 +277,14 @@ baidu.base.KVDefinition = function (keyName, valName) {
 /**
  * @return {string}
  */
-baidu.base.KVDefinition.prototype.getKeyName = function () {
+rebar.mvc.KVDefinition.prototype.getKeyName = function () {
     return this.keyName_;
 };
 
 /**
  * @return {string}
  */
-baidu.base.KVDefinition.prototype.getValName = function () {
+rebar.mvc.KVDefinition.prototype.getValName = function () {
     return this.valName_;
 };
 
@@ -292,9 +292,9 @@ baidu.base.KVDefinition.prototype.getValName = function () {
  * @param {number=} start
  * @param {number=} end
  * @constructor
- * @extends {baidu.base.BaseModel}
+ * @extends {rebar.mvc.BaseModel}
  */
-baidu.base.NumberRange = function (start, end) {
+rebar.mvc.NumberRange = function (start, end) {
     /**
      * @type {number}
      */
@@ -308,14 +308,14 @@ baidu.base.NumberRange = function (start, end) {
 /**
  * @return {boolean}
  */
-baidu.base.NumberRange.prototype.isUniversal = function () {
+rebar.mvc.NumberRange.prototype.isUniversal = function () {
     return !isFinite(this.start) && !isFinite(this.end) && this.start < this.end;
 };
 
 /**
  * @override
  */
-baidu.base.NumberRange.prototype.toJson = function () {
+rebar.mvc.NumberRange.prototype.toJson = function () {
     var ret = {};
     if (isFinite(this.start)) {
         ret['s'] = this.start;
@@ -329,7 +329,7 @@ baidu.base.NumberRange.prototype.toJson = function () {
 /**
  * @override
  */
-baidu.base.NumberRange.prototype.initWitJson = function (obj) {
+rebar.mvc.NumberRange.prototype.initWitJson = function (obj) {
     if (!obj) {
         return false;
     }

@@ -3,7 +3,7 @@
  *
  * @author zhangzhihong02
  */
-goog.provide('baidu.base.DialogInterface');
+goog.provide('rebar.dialog.DialogInterface');
 
 goog.require('goog.disposable.IDisposable');
 
@@ -11,28 +11,28 @@ goog.require('goog.disposable.IDisposable');
  * @interface
  * @extends {goog.disposable.IDisposable}
  */
-baidu.base.DialogInterface = function () {
+rebar.dialog.DialogInterface = function () {
 };
 
 /**
  * @param {string} title The title of dialog.
- * @param {string|baidu.base.BaseView} content The content of dialog.
+ * @param {string|rebar.mvc.BaseView} content The content of dialog.
  * @param {boolean|Function=} optShowCancel Whether to show cancel button.
  *     If a function is passed in, then show cancel and call the function
  *     when cancel button clicked.
  * @param {boolean|Function=} optShowYes Whether to show yes button.
  *     The function type is same with cancel.
- * @return {baidu.base.DialogInterface}
+ * @return {rebar.dialog.DialogInterface}
  */
-baidu.base.DialogInterface.prototype.setup;
+rebar.dialog.DialogInterface.prototype.setup;
 
 /**
  * To show the dialog
  */
-baidu.base.DialogInterface.prototype.show;
+rebar.dialog.DialogInterface.prototype.show;
 
 /**
  * To close the dialog
  */
-baidu.base.DialogInterface.prototype.close;
+rebar.dialog.DialogInterface.prototype.close;
 

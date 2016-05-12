@@ -5,7 +5,7 @@
  */
 goog.provide('rebar.ext.sui.PaginationView');
 
-goog.require('baidu.base.PaginationView');
+goog.require('rebar.views.PaginationView');
 goog.require('rebar.ext.sui.tpl');
 
 /**
@@ -13,12 +13,12 @@ goog.require('rebar.ext.sui.tpl');
  *
  * @param {number=} optPageSize The optional page size.
  * @constructor
- * @extends {baidu.base.PaginationView}
+ * @extends {rebar.views.PaginationView}
  */
 rebar.ext.sui.PaginationView = function (optPageSize) {
-    baidu.base.PaginationView.call(this, optPageSize);
+    rebar.views.PaginationView.call(this, optPageSize);
 };
-goog.inherits(rebar.ext.sui.PaginationView, baidu.base.PaginationView);
+goog.inherits(rebar.ext.sui.PaginationView, rebar.views.PaginationView);
 
 /**
  * @param {string=} optName
@@ -31,7 +31,7 @@ rebar.ext.sui.PaginationView.extendsDataTablePaging = function (optName) {
             var view = new rebar.ext.sui.PaginationView(
                 oSettings._iDisplayLength);
             view.render(nPaging);
-            var eName = baidu.base.PaginationView.Events.ChangePage;
+            var eName = rebar.views.PaginationView.Events.ChangePage;
             var eventKey = goog.events.listen(view, eName, function(e) {
                 oSettings.oApi._fnPageChange(oSettings, e.pageNumber);
                 fnCallbackDraw(oSettings);
@@ -89,8 +89,8 @@ rebar.ext.sui.PaginationView.prototype.updateView = function () {
     var startPage = this.getVisibleStartPage();
     var totalPage = this.getTotalPage();
 
-    this.getDomById(baidu.base.pvdc.ID_LAST_PAGE).innerHTML = totalPage;
-    var elFirst = this.getDomById(baidu.base.pvdc.ID_FIRST_PAGE);
+    this.getDomById(rebar.views.pvdc.ID_LAST_PAGE).innerHTML = totalPage;
+    var elFirst = this.getDomById(rebar.views.pvdc.ID_FIRST_PAGE);
     if (this.getCurrentPage() === 0) {
         goog.dom.classes.add(elFirst, this.getActiveCssClass());
         goog.dom.classes.remove(elFirst, this.getDisableCssClass());
@@ -98,7 +98,7 @@ rebar.ext.sui.PaginationView.prototype.updateView = function () {
         goog.dom.classes.remove(elFirst, this.getActiveCssClass());
     }
 
-    var elLast = this.getDomById(baidu.base.pvdc.ID_LAST_PAGE);
+    var elLast = this.getDomById(rebar.views.pvdc.ID_LAST_PAGE);
     if (this.getCurrentPage() + 1 === totalPage) {
         goog.dom.classes.add(elLast, this.getActiveCssClass());
         goog.dom.classes.remove(elLast, this.getDisableCssClass());
@@ -107,16 +107,16 @@ rebar.ext.sui.PaginationView.prototype.updateView = function () {
     }
     goog.style.showElement(elLast, totalPage > 1);
 
-    goog.style.showElement(this.getDomById(baidu.base.spvdc.ID_START_GAP),
+    goog.style.showElement(this.getDomById(rebar.ext.sui.pvdc.ID_START_GAP),
                            startPage > 1);
     goog.style.showElement(
-        this.getDomById(baidu.base.spvdc.ID_END_GAP),
+        this.getDomById(rebar.ext.sui.pvdc.ID_END_GAP),
         startPage + this.getPageNumShow() < totalPage - 1);
 
     if (totalPage > startPage && startPage + this.getPageNumShow() >= totalPage) {
         // 将“最后一页”隐藏
-        var s = baidu.base.util.attrSelector(
-            baidu.base.pvdc.ATTR_PAGE_INDEX, (totalPage - startPage - 1) + '');
+        var s = rebar.util.attrSelector(
+            rebar.views.pvdc.ATTR_PAGE_INDEX, (totalPage - startPage - 1) + '');
         goog.style.showElement(this.getElement().querySelector(s), false);
     }
 };
@@ -138,5 +138,5 @@ rebar.ext.sui.PaginationView.DomConst = {
     ID_START_GAP: 'sgap',
     ID_END_GAP: 'egap'
 };
-baidu.base.spvdc = rebar.ext.sui.PaginationView.DomConst;
+rebar.ext.sui.pvdc = rebar.ext.sui.PaginationView.DomConst;
 

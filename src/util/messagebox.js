@@ -4,11 +4,11 @@
  * @author hector<zzh-83@163.com>
  */
 
-goog.provide('baidu.base.MessageBox');
+goog.provide('rebar.util.MessageBox');
 
-goog.require('baidu.base.Settings');
-goog.require('baidu.base.tplcommon');
-goog.require('baidu.base.util');
+goog.require('rebar.model.Settings');
+goog.require('rebar.util');
+goog.require('rebar.util.tpl');
 
 goog.require('goog.async.Delay');
 goog.require('goog.style');
@@ -16,14 +16,14 @@ goog.require('goog.style');
 /**
  * @constructor
  */
-baidu.base.MessageBox = function () {
+rebar.util.MessageBox = function () {
 
     /**
      * @type {goog.async.Delay}
      * @private
      */
     this.hideDelay_ = new goog.async.Delay(goog.bind(this.onTipTimeout_, this),
-                         baidu.base.MessageBox.Config_.Duration);
+                                           rebar.util.MessageBox.Config_.Duration);
 
     /**
      * @type {Element}
@@ -38,30 +38,30 @@ baidu.base.MessageBox = function () {
     this.nextId_ = 0;
 
     /**
-     * @type {baidu.base.MessageBox.MessageInfo}
+     * @type {rebar.util.MessageBox.MessageInfo}
      * @private
      */
     this.curInfo_ = null;
 
     /**
-     * @type {Array.<baidu.base.MessageBox.MessageInfo>}
+     * @type {Array.<rebar.util.MessageBox.MessageInfo>}
      * @private
      */
     this.msgInfoList_ = [];
 
     /**
-     * @type {baidu.base.BaseView}
+     * @type {rebar.mvc.BaseView}
      * @private
      */
     this.referView_ = null;
 };
-goog.addSingletonGetter(baidu.base.MessageBox);
+goog.addSingletonGetter(rebar.util.MessageBox);
 
 /**
  * 设置参照的page，显示时将参照改view来显示
- * @param {baidu.base.BaseView} view
+ * @param {rebar.mvc.BaseView} view
  */
-baidu.base.MessageBox.prototype.setReferView = function (view) {
+rebar.util.MessageBox.prototype.setReferView = function (view) {
     this.referView_ = view;
 };
 
@@ -70,8 +70,8 @@ baidu.base.MessageBox.prototype.setReferView = function (view) {
  * @param {string} msg
  * @return {number} 返回的id用来在hide时使用
  */
-baidu.base.MessageBox.prototype.showLoading = function (msg) {
-    var info = this.recordMessage_(msg, baidu.base.MessageBox.MessageType.Loading);
+rebar.util.MessageBox.prototype.showLoading = function (msg) {
+    var info = this.recordMessage_(msg, rebar.util.MessageBox.MessageType.Loading);
     this.showMessage_(info);
     return info.id;
 };
@@ -80,23 +80,23 @@ baidu.base.MessageBox.prototype.showLoading = function (msg) {
  * 显示tip信息
  * @param {string} msg
  */
-baidu.base.MessageBox.prototype.showTip = function (msg) {
-    var info = this.recordMessage_(msg, baidu.base.MessageBox.MessageType.Tip);
+rebar.util.MessageBox.prototype.showTip = function (msg) {
+    var info = this.recordMessage_(msg, rebar.util.MessageBox.MessageType.Tip);
     this.showMessage_(info);
     this.hideDelay_.isActive() && this.hideDelay_.fire(); // 先隐藏之前的tip
     this.hideDelay_.start();
 };
 
 /**
- * @param {baidu.base.MessageBox.MessageInfo} info
+ * @param {rebar.util.MessageBox.MessageInfo} info
  * @private
  */
-baidu.base.MessageBox.prototype.showMessage_ = function (info) {
+rebar.util.MessageBox.prototype.showMessage_ = function (info) {
     if (info === this.curInfo_) {
         return;
     }
     this.curInfo_ = info;
-    if (info.type === baidu.base.MessageBox.MessageType.Loading) {
+    if (info.type === rebar.util.MessageBox.MessageType.Loading) {
         goog.dom.classes.add(this.msgDom_, 'loading');
     } else {
         goog.dom.classes.remove(this.msgDom_, 'loading');
@@ -108,11 +108,11 @@ baidu.base.MessageBox.prototype.showMessage_ = function (info) {
 
 /**
  * @param {string} msg
- * @param {number.<baidu.base.MessageBox.MessageType>} type
- * @return {baidu.base.MessageBox.MessageInfo} The info generated.
+ * @param {number.<rebar.util.MessageBox.MessageType>} type
+ * @return {rebar.util.MessageBox.MessageInfo} The info generated.
  * @private
  */
-baidu.base.MessageBox.prototype.recordMessage_ = function (msg, type) {
+rebar.util.MessageBox.prototype.recordMessage_ = function (msg, type) {
     if (this.msgInfoList_.length === 0) {
         goog.events.listen(window,
                            goog.events.EventType.SCROLL,
@@ -120,7 +120,7 @@ baidu.base.MessageBox.prototype.recordMessage_ = function (msg, type) {
                            undefined,
                            this);
     }
-    var ret = new baidu.base.MessageBox.MessageInfo(this.nextId_++, msg, type);
+    var ret = new rebar.util.MessageBox.MessageInfo(this.nextId_++, msg, type);
     this.msgInfoList_.push(ret);
     return ret;
 };
@@ -128,7 +128,7 @@ baidu.base.MessageBox.prototype.recordMessage_ = function (msg, type) {
 /**
  * @param {number} id showLoading 返回的id
  */
-baidu.base.MessageBox.prototype.hide = function (id) {
+rebar.util.MessageBox.prototype.hide = function (id) {
     for (var i in this.msgInfoList_) {
         if (this.msgInfoList_[i].id === id) {
             this.msgInfoList_.splice(i, 1);
@@ -151,11 +151,11 @@ baidu.base.MessageBox.prototype.hide = function (id) {
 /**
  * @return {Element}
  */
-baidu.base.MessageBox.prototype.buildDom_ = function () {
-    var tipHtml = baidu.base.tplcommon.messageBox({
-        baseResPath: baidu.base.Settings.getDefault().moduleResBasePath
+rebar.util.MessageBox.prototype.buildDom_ = function () {
+    var tipHtml = rebar.util.tpl.messageBox({
+        baseResPath: rebar.model.Settings.getDefault().moduleResBasePath
     });
-    var msgDom = baidu.base.util.htmlToElement(tipHtml);
+    var msgDom = rebar.util.htmlToElement(tipHtml);
     // 追加到当前页面
     document.body.appendChild(msgDom);
     return msgDom;
@@ -164,7 +164,7 @@ baidu.base.MessageBox.prototype.buildDom_ = function () {
 /**
  * @private
  */
-baidu.base.MessageBox.prototype.updatePos_ = function () {
+rebar.util.MessageBox.prototype.updatePos_ = function () {
     var referDom = document.body;
     var offset = null;
     if (this.referView_
@@ -177,15 +177,15 @@ baidu.base.MessageBox.prototype.updatePos_ = function () {
       offset.x - window.scrollX + Math.ceil((
           goog.style.getSize(referDom).width
           - goog.style.getSize(this.msgDom_).width) / 2),
-      baidu.base.MessageBox.Config_.TopPos);
+      rebar.util.MessageBox.Config_.TopPos);
 };
 
 /**
  * @private
  */
-baidu.base.MessageBox.prototype.onTipTimeout_ = function () {
+rebar.util.MessageBox.prototype.onTipTimeout_ = function () {
     for (var i in this.msgInfoList_) {
-        if (this.msgInfoList_[i].type === baidu.base.MessageBox.MessageType.Tip) {
+        if (this.msgInfoList_[i].type === rebar.util.MessageBox.MessageType.Tip) {
             this.hide(this.msgInfoList_[i].id);
         }
     }
@@ -195,14 +195,14 @@ baidu.base.MessageBox.prototype.onTipTimeout_ = function () {
  * @param {Event} event
  * @private
  */
-baidu.base.MessageBox.prototype.onWindowScroll_ = function (event) {
+rebar.util.MessageBox.prototype.onWindowScroll_ = function (event) {
     this.updatePos_();
 };
 
 /**
  * @enum
  */
-baidu.base.MessageBox.MessageType = {
+rebar.util.MessageBox.MessageType = {
     Loading: 0,
     Tip: 1
 };
@@ -210,11 +210,11 @@ baidu.base.MessageBox.MessageType = {
 /**
  * @param {number} id
  * @param {string} msg
- * @param {number.<baidu.base.MessageBox.MessageType>} type
+ * @param {number.<rebar.util.MessageBox.MessageType>} type
  * @constructor
  * @private
  */
-baidu.base.MessageBox.MessageInfo = function (id, msg, type) {
+rebar.util.MessageBox.MessageInfo = function (id, msg, type) {
     this.id = id;
     this.message = msg;
     this.type = type;
@@ -223,7 +223,7 @@ baidu.base.MessageBox.MessageInfo = function (id, msg, type) {
 /**
  * @enum
  */
-baidu.base.MessageBox.Config_ = {
+rebar.util.MessageBox.Config_ = {
     TopPos: 40,
     Duration: 3000
 };

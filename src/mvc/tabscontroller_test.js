@@ -3,14 +3,14 @@
  *
  * @author zhangzhihong02
  */
-goog.require('baidu.base.TabsController');
+goog.require('rebar.mvc.TabsController');
 
 goog.require('goog.object');
 
 describe('tabs-controller.js test suite', function () {
     it('loadController and unloadController function normal test', function () {
-        var controller = new baidu.base.TabsController();
-        var pageController = new baidu.base.ViewController();
+        var controller = new rebar.mvc.TabsController();
+        var pageController = new rebar.mvc.ViewController();
         controller.appendTab(pageController, true);
         spyOn(pageController, 'loadController');
         spyOn(pageController, 'unloadController');
@@ -21,28 +21,28 @@ describe('tabs-controller.js test suite', function () {
     });
 
     it('appendTab function normal test', function () {
-        var controller = new baidu.base.TabsController();
-        controller.appendTab(new baidu.base.ViewController());
+        var controller = new rebar.mvc.TabsController();
+        controller.appendTab(new rebar.mvc.ViewController());
         expect(goog.object.getKeys(controller.tabsMap_).length).toBe(1);
         expect(controller.getActiveIndex()).toBe(-1);
-        controller.appendTab(new baidu.base.ViewController(), true);
+        controller.appendTab(new rebar.mvc.ViewController(), true);
         expect(goog.object.getKeys(controller.tabsMap_).length).toBe(2);
         expect(controller.getActiveIndex()).toBe(1);
     });
 
     it('changeToTab and changeToView function normal test', function () {
-        var view = new baidu.base.BaseView();
+        var view = new rebar.mvc.BaseView();
         view.render();
-        var controller = new baidu.base.TabsController(view);
+        var controller = new rebar.mvc.TabsController(view);
         expect(controller.changeToTab).toThrow();
-        var pageController = new baidu.base.ViewController();
+        var pageController = new rebar.mvc.ViewController();
         spyOn(pageController, 'loadController').andCallThrough();
         controller.appendTab(pageController, true);
         expect(pageController.loadController).not.toHaveBeenCalled();
         controller.loadController();
 
         spyOn(pageController, 'unloadController').andCallThrough();
-        var anotherPageController = new baidu.base.ViewController();
+        var anotherPageController = new rebar.mvc.ViewController();
         spyOn(anotherPageController, 'loadController').andCallThrough();
         controller.appendTab(anotherPageController, true);
         expect(pageController.unloadController).toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe('tabs-controller.js test suite', function () {
     });
 
     it('changeToPrevTab and changeToNextTab function normal test', function () {
-        var controller = new baidu.base.TabsController();
+        var controller = new rebar.mvc.TabsController();
         spyOn(controller, 'changeToPrevTab').andCallThrough();
         spyOn(controller, 'changeToNextTab').andCallThrough();
         expect(controller.changeToPrevTab).toThrow();
@@ -62,13 +62,13 @@ describe('tabs-controller.js test suite', function () {
         expect(controller.changeToNextTab).toThrow();
         expect(controller.getActiveIndex()).toBe(-1);
 
-        controller.appendTabView(new baidu.base.BaseView(), true);
+        controller.appendTabView(new rebar.mvc.BaseView(), true);
         expect(controller.changeToPrevTab).toThrow();
         expect(controller.getActiveIndex()).toBe(0);
         expect(controller.changeToNextTab).toThrow();
         expect(controller.getActiveIndex()).toBe(0);
 
-        controller.appendTabView(new baidu.base.BaseView());
+        controller.appendTabView(new rebar.mvc.BaseView());
         expect(controller.changeToPrevTab).toThrow();
         expect(controller.getActiveIndex()).toBe(0);
         controller.changeToNextTab();
@@ -77,18 +77,18 @@ describe('tabs-controller.js test suite', function () {
 
     it('appendTab function remove tabs after active test', function () {
         var NewController = function () {
-            baidu.base.TabsController.call(this);
+            rebar.mvc.TabsController.call(this);
         };
-        goog.inherits(NewController, baidu.base.TabsController);
+        goog.inherits(NewController, rebar.mvc.TabsController);
         NewController.prototype.removeTabsAfterActive = function () {
             return true;
         };
 
         var controller = new NewController();
-        controller.appendTabView(new baidu.base.BaseView(), true);
-        var pageController = new baidu.base.ViewController();
+        controller.appendTabView(new rebar.mvc.BaseView(), true);
+        var pageController = new rebar.mvc.ViewController();
         controller.appendTab(pageController);
-        controller.appendTabView(new baidu.base.BaseView(), true);
+        controller.appendTabView(new rebar.mvc.BaseView(), true);
         expect(controller.getActiveIndex()).toBe(2);
         expect(goog.object.getKeys(controller.tabsMap_).length).toBe(2);
         expect(goog.object.getValues(controller.tabsMap_)).not.toContain(pageController);

@@ -1,0 +1,31 @@
+{namespace rebar.views.tpl}
+
+/**
+ * 翻页功能的界面
+ * @param viewId
+ * @param pageSize
+ * @param itemNum
+ * @param numShow
+ */
+{template .paginationView}
+<div class="clearfix">
+  <div class="pageview-length">
+    每页 <label>{$pageSize}</label> 条</label>
+  </div>
+  <div class="pageview-left-seperator">|</div>
+  <div class="pageview-info">共 <label id="{$viewId}{rebar.views.pvdc.ID_ITEM_NUM}">{$itemNum}</label> 条记录</div>
+  <div class="pageview-page" id="{$viewId}{rebar.views.pvdc.ID_PAGE_AREA}">
+    <a class="first" href="javascript:void(0);" id="{$viewId}{rebar.views.pvdc.ID_FIRST_PAGE}">第一页</a>
+    <a href="javascript:void(0);" id="{$viewId}{rebar.views.pvdc.ID_PRE_PAGE}"> 上一页 </a>
+    {for $i in range($numShow)}
+      <a href="javascript:void(0);" {rebar.views.pvdc.ATTR_PAGE_INDEX}="{$i}">{$i + 1}</a>
+    {/for}
+    <a href="javascript:void(0);" id="{$viewId}{rebar.views.pvdc.ID_NEXT_PAGE}"> 下一页 </a>
+    <a href="javascript:void(0);" id="{$viewId}{rebar.views.pvdc.ID_LAST_PAGE}"> 最后一页 </a>
+    <span style="display: none;" id="{$viewId}{rebar.views.pvdc.ID_JUMP_AREA}">
+      <input type="text" id="{$viewId}{rebar.views.pvdc.ID_JUMP_INPUT}">
+      <a href="javascript:void(0);" id="{$viewId}{rebar.views.pvdc.ID_JUMP_BUTTON}">跳转</a>
+    </span>
+  </div>
+</div>
+{/template}

@@ -6,11 +6,11 @@
 /* jshint -W069 */
 /* eslint-disable fecs-dot-notation */
 /* eslint-disable new-cap */
-goog.provide('baidu.base.ClosureDialog');
+goog.provide('rebar.dialog.ClosureDialog');
 
-goog.require('baidu.base.DialogInterface');
-goog.require('baidu.base.tplClosureDialog');
-goog.require('baidu.base.util');
+goog.require('rebar.dialog.DialogInterface');
+goog.require('rebar.dialog.tplclosuredialog');
+goog.require('rebar.util');
 
 goog.require('goog.ui.Component');
 goog.require('goog.ui.ModalPopup');
@@ -19,9 +19,9 @@ goog.require('goog.ui.ModalPopup');
  * 基于Closure封装的对话框
  * @constructor
  * @extends {goog.ui.ModalPopup}
- * @implements {baidu.base.DialogInterface}
+ * @implements {rebar.dialog.DialogInterface}
  */
-baidu.base.ClosureDialog = function () {
+rebar.dialog.ClosureDialog = function () {
     goog.ui.ModalPopup.call(this);
 
     /**
@@ -36,22 +36,22 @@ baidu.base.ClosureDialog = function () {
      */
     this._yesOnceCallback = null;
 };
-goog.inherits(baidu.base.ClosureDialog, goog.ui.ModalPopup);
+goog.inherits(rebar.dialog.ClosureDialog, goog.ui.ModalPopup);
 
 /**
  * 弹出错误提示框
  * @param {string} msg The msg to show.
  * @param {string=} optTitle The optional title.
  */
-baidu.base.ClosureDialog.popupError = function (msg, optTitle) {
-    var dialog = new baidu.base.ClosureDialog();
+rebar.dialog.ClosureDialog.popupError = function (msg, optTitle) {
+    var dialog = new rebar.dialog.ClosureDialog();
     dialog.setup(optTitle || '错误', msg, false, true).show();
 };
 
 /**
  * @override
  */
-baidu.base.ClosureDialog.prototype.setup = function (
+rebar.dialog.ClosureDialog.prototype.setup = function (
     title, content, optShowCancel, optShowYes) {
     if (!this.getElement()) {
         this.createDom();
@@ -65,7 +65,7 @@ baidu.base.ClosureDialog.prototype.setup = function (
         elContent.innerHTML = content;
     }
 
-    var elCancel = this._getDomById(baidu.base.cddc.ID_CANCEL_BTN);
+    var elCancel = this._getDomById(rebar.dialog.cddc.ID_CANCEL_BTN);
     if (optShowCancel === false) {
         goog.style.showElement(elCancel, false);
     } else {
@@ -75,7 +75,7 @@ baidu.base.ClosureDialog.prototype.setup = function (
         goog.style.showElement(elCancel, true);
     }
 
-    var elYes = this._getDomById(baidu.base.cddc.ID_OK_BTN);
+    var elYes = this._getDomById(rebar.dialog.cddc.ID_OK_BTN);
     if (optShowYes === false) {
         goog.style.showElement(elYes, false);
     } else {
@@ -91,17 +91,17 @@ baidu.base.ClosureDialog.prototype.setup = function (
 /**
  * @override
  */
-baidu.base.ClosureDialog.prototype.enterDocument = function () {
-    baidu.base.ClosureDialog.superClass_.enterDocument.call(this);
+rebar.dialog.ClosureDialog.prototype.enterDocument = function () {
+    rebar.dialog.ClosureDialog.superClass_.enterDocument.call(this);
 
-    var elYes = this._getDomById(baidu.base.cddc.ID_OK_BTN);
+    var elYes = this._getDomById(rebar.dialog.cddc.ID_OK_BTN);
     this.getHandler().listen(elYes, goog.events.EventType.CLICK, function () {
         if (false !== this._onApprove()) {
             this._onHidden();
         }
     });
 
-    var elCancel = this._getDomById(baidu.base.cddc.ID_CANCEL_BTN);
+    var elCancel = this._getDomById(rebar.dialog.cddc.ID_CANCEL_BTN);
     this.getHandler().listen(elCancel, goog.events.EventType.CLICK, function () {
         if (false !== this._onCancel()) {
             this._onHidden();
@@ -112,16 +112,16 @@ baidu.base.ClosureDialog.prototype.enterDocument = function () {
 /**
  * @override
  */
-baidu.base.ClosureDialog.prototype.show = function () {
+rebar.dialog.ClosureDialog.prototype.show = function () {
     this.setVisible(true);
-    var elCancel = this._getDomById(baidu.base.cddc.ID_CANCEL_BTN);
+    var elCancel = this._getDomById(rebar.dialog.cddc.ID_CANCEL_BTN);
     elCancel.focus();
 };
 
 /**
  * @override
  */
-baidu.base.ClosureDialog.prototype.close = function () {
+rebar.dialog.ClosureDialog.prototype.close = function () {
     this.setVisible(false);
 };
 
@@ -129,8 +129,8 @@ baidu.base.ClosureDialog.prototype.close = function () {
  * 启用确定按钮
  * @param {boolean} flag The switcher.
  */
-baidu.base.ClosureDialog.prototype.enableYesButton = function (flag) {
-    var el = this._getDomById(baidu.base.cddc.ID_OK_BTN);
+rebar.dialog.ClosureDialog.prototype.enableYesButton = function (flag) {
+    var el = this._getDomById(rebar.dialog.cddc.ID_OK_BTN);
     if (flag) {
         goog.dom.classes.remove(el, 'disabled');
     } else {
@@ -141,10 +141,10 @@ baidu.base.ClosureDialog.prototype.enableYesButton = function (flag) {
 /**
  * @override
  */
-baidu.base.ClosureDialog.prototype.createDom = function () {
-    baidu.base.ClosureDialog.superClass_.createDom.call(this);
+rebar.dialog.ClosureDialog.prototype.createDom = function () {
+    rebar.dialog.ClosureDialog.superClass_.createDom.call(this);
 
-    var domHtml = baidu.base.tplClosureDialog.viewHtml();
+    var domHtml = rebar.dialog.tplclosuredialog.viewHtml();
     this.getElement().innerHTML = domHtml;
 };
 
@@ -154,7 +154,7 @@ baidu.base.ClosureDialog.prototype.createDom = function () {
  * @return {Element}
  * @private
  */
-baidu.base.ClosureDialog.prototype._getDomById = function (id) {
+rebar.dialog.ClosureDialog.prototype._getDomById = function (id) {
     return this.getElement().querySelector('#' + id);
 };
 
@@ -163,7 +163,7 @@ baidu.base.ClosureDialog.prototype._getDomById = function (id) {
  * @return {boolean|undefined}
  * @private
  */
-baidu.base.ClosureDialog.prototype._onApprove = function () {
+rebar.dialog.ClosureDialog.prototype._onApprove = function () {
     if (this._yesOnceCallback
         && this._yesOnceCallback.call(null) === false) {
         return false;
@@ -175,7 +175,7 @@ baidu.base.ClosureDialog.prototype._onApprove = function () {
  * @return {boolean|undefined}
  * @private
  */
-baidu.base.ClosureDialog.prototype._onCancel = function () {
+rebar.dialog.ClosureDialog.prototype._onCancel = function () {
     if (this._cancelOnceCallback
         && this._cancelOnceCallback.call(null) === false) {
         return false;
@@ -186,7 +186,7 @@ baidu.base.ClosureDialog.prototype._onCancel = function () {
  * 隐藏对话框处理函数
  * @private
  */
-baidu.base.ClosureDialog.prototype._onHidden = function () {
+rebar.dialog.ClosureDialog.prototype._onHidden = function () {
     this._yesOnceCallback = null;
     this._cancelOnceCallback = null;
     this.dispose();
@@ -195,16 +195,16 @@ baidu.base.ClosureDialog.prototype._onHidden = function () {
 /**
  * @override
  */
-baidu.base.ClosureDialog.prototype.disposeInternal = function () {
-    baidu.base.ClosureDialog.superClass_.disposeInternal.call(this);
+rebar.dialog.ClosureDialog.prototype.disposeInternal = function () {
+    rebar.dialog.ClosureDialog.superClass_.disposeInternal.call(this);
 };
 
 /**
  * @enum {string}
  */
-baidu.base.ClosureDialog.DomConst = {
+rebar.dialog.ClosureDialog.DomConst = {
     ID_CANCEL_BTN: 'cancel-button',
     ID_OK_BTN: 'ok-button'
 };
-baidu.base.cddc = baidu.base.ClosureDialog.DomConst;
+rebar.dialog.cddc = rebar.dialog.ClosureDialog.DomConst;
 

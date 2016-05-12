@@ -5,12 +5,12 @@
 /* jshint -W069 */
 /* eslint-disable fecs-dot-notation */
 /* eslint-disable new-cap */
-goog.provide('baidu.base.BaseView');
+goog.provide('rebar.mvc.BaseView');
 
-goog.require('baidu.base.Const');
-goog.require('baidu.base.MessageBox');
-goog.require('baidu.base.Stateful');
-goog.require('baidu.base.util');
+goog.require('rebar.consts');
+goog.require('rebar.util.MessageBox');
+goog.require('rebar.model.Stateful');
+goog.require('rebar.util');
 
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
@@ -27,24 +27,24 @@ goog.require('goog.ui.Tooltip');
  * @param {boolean=} optRenderDomWithIdPrefix see method renderDomWithIdPrefix,.
  * @constructor
  * @extends {goog.ui.Component}
- * @implements {baidu.base.Stateful}
+ * @implements {rebar.model.Stateful}
  */
-baidu.base.BaseView = function (optRenderDomWithIdPrefix) {
+rebar.mvc.BaseView = function (optRenderDomWithIdPrefix) {
     goog.ui.Component.call(this);
 
     /**
      * 起这么长的名字是怕和子类冲突
-     * @type {baidu.base.BaseView.Settings}
+     * @type {rebar.mvc.BaseView.Settings}
      * @private
      */
-    this.baseViewSettings_ = new baidu.base.BaseView.Settings(optRenderDomWithIdPrefix);
+    this.baseViewSettings_ = new rebar.mvc.BaseView.Settings(optRenderDomWithIdPrefix);
 
     /**
      * 这样生成的id是一个有效的标识符
      * @type {string}
      * @private
      */
-    this.viewId_ = 'b' + baidu.base.BaseView.idCounter_++ + '_';
+    this.viewId_ = 'b' + rebar.mvc.BaseView.idCounter_++ + '_';
 
     /**
      * @type {boolean}
@@ -59,7 +59,7 @@ baidu.base.BaseView = function (optRenderDomWithIdPrefix) {
     this.tooltips_ = [];
 
     /**
-     * @type {Object.<string, baidu.base.BaseInput>}
+     * @type {Object.<string, rebar.mvc.BaseInput>}
      * @private
      */
     this._inputsMap = {};
@@ -78,13 +78,13 @@ baidu.base.BaseView = function (optRenderDomWithIdPrefix) {
      */
     this.subscriptionOverallKeys_ = [];
 };
-goog.inherits(baidu.base.BaseView, goog.ui.Component);
+goog.inherits(rebar.mvc.BaseView, goog.ui.Component);
 
 /**
  * 将当前view从dom中移除，并unload，并且从父view（有的话）移除。
  * 调用该函数后在dom体系和view体系就彻底清除了。
  */
-baidu.base.BaseView.prototype.remove = function () {
+rebar.mvc.BaseView.prototype.remove = function () {
     if (this.getParent()) {
         this.getParent().removeChild(this, true);
     }
@@ -111,10 +111,10 @@ baidu.base.BaseView.prototype.remove = function () {
  * 添加为子view的实例的enterDocument和existDocument方法会随着父view
  * enterDocument和existDocument被同步调用。
  *
- * @param {baidu.base.BaseView} view
+ * @param {rebar.mvc.BaseView} view
  * @param {Element=} optElContainer
  */
-baidu.base.BaseView.prototype.addSubView = function (view, optElContainer) {
+rebar.mvc.BaseView.prototype.addSubView = function (view, optElContainer) {
     if (optElContainer) {
         this.addChild(view);
         view.render(optElContainer);
@@ -124,10 +124,10 @@ baidu.base.BaseView.prototype.addSubView = function (view, optElContainer) {
 };
 
 /**
- * @param {baidu.base.BaseView} view
+ * @param {rebar.mvc.BaseView} view
  * @param {Element} elDecorate
  */
-baidu.base.BaseView.prototype.decorateSubView = function (view, elDecorate) {
+rebar.mvc.BaseView.prototype.decorateSubView = function (view, elDecorate) {
     this.addChild(view);
     view.decorate(elDecorate);
 };
@@ -135,11 +135,11 @@ baidu.base.BaseView.prototype.decorateSubView = function (view, elDecorate) {
 /**
  * 子view可以是多个，该方法在添加时指定在子view中的顺序，不常用。
  *
- * @param {baidu.base.BaseView} view
+ * @param {rebar.mvc.BaseView} view
  * @param {number} index
  * @param {Element=} optElContainer
  */
-baidu.base.BaseView.prototype.addSubViewAt = function (
+rebar.mvc.BaseView.prototype.addSubViewAt = function (
   view, index, optElContainer) {
     if (optElContainer) {
         this.addChildAt(view, index);
@@ -150,25 +150,25 @@ baidu.base.BaseView.prototype.addSubViewAt = function (
 };
 
 /**
- * @return {baidu.base.BaseView}
+ * @return {rebar.mvc.BaseView}
  */
-baidu.base.BaseView.prototype.getParentView = function () {
+rebar.mvc.BaseView.prototype.getParentView = function () {
     var p = this.getParent();
-    return p instanceof baidu.base.BaseView ? p : null;
+    return p instanceof rebar.mvc.BaseView ? p : null;
 };
 
 /**
  * View也被设计成是有状态的，不过很少用到。
  * @override
  */
-baidu.base.BaseView.prototype.getState = function () {
-    return new baidu.base.StateModel();
+rebar.mvc.BaseView.prototype.getState = function () {
+    return new rebar.model.StateModel();
 };
 
 /**
  * @override
  */
-baidu.base.BaseView.prototype.setState = function (state) {
+rebar.mvc.BaseView.prototype.setState = function (state) {
     if (!this.isViewInitialized()) {
         this.init();
     }
@@ -179,7 +179,7 @@ baidu.base.BaseView.prototype.setState = function (state) {
  * 会生成一个唯一的id（相对于一次运行过程中的所有view），并且该id还是合法的标识符。
  * @override
  */
-baidu.base.BaseView.prototype.getId = function () {
+rebar.mvc.BaseView.prototype.getId = function () {
     return this.viewId_;
 };
 
@@ -199,7 +199,7 @@ baidu.base.BaseView.prototype.getId = function () {
  *
  * @return {boolean}  * @protected
  */
-baidu.base.BaseView.prototype.renderDomWithIdPrefix = function () {
+rebar.mvc.BaseView.prototype.renderDomWithIdPrefix = function () {
     return this.baseViewSettings_.renderDomWithIdPrefix;
 };
 
@@ -210,7 +210,7 @@ baidu.base.BaseView.prototype.renderDomWithIdPrefix = function () {
  * @return {string} 如果在生产dom的时候添加了前缀id，就生成带前缀id的字符串
  * @protected
  */
-baidu.base.BaseView.prototype.getDomStr = function (str) {
+rebar.mvc.BaseView.prototype.getDomStr = function (str) {
     return this.getDomPrefix() + str;
 };
 
@@ -222,7 +222,7 @@ baidu.base.BaseView.prototype.getDomStr = function (str) {
  * @return {string}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomPrefix = function () {
+rebar.mvc.BaseView.prototype.getDomPrefix = function () {
     return this.renderDomWithIdPrefix() ? this.getId() : '';
 };
 
@@ -230,21 +230,21 @@ baidu.base.BaseView.prototype.getDomPrefix = function () {
  * 页面获得焦点，子类自管实现获取焦点时的逻辑。默认行为是找到该类中的第一个
  * input并将其focus。
  */
-baidu.base.BaseView.prototype.focus = function () {
+rebar.mvc.BaseView.prototype.focus = function () {
     var el = this.getElement().querySelector('input');
     el && el.focus();
 };
 
 /**
- * @see baidu.base.BaseController#reloadController
+ * @see rebar.mvc.BaseController#reloadController
  * 重新加载页面
  */
-baidu.base.BaseView.prototype.reload = function () {
+rebar.mvc.BaseView.prototype.reload = function () {
     if (!this.isInDocument()) {
         throw 'reload an unloaded view';
     }
     this.forEachChild(function (view) {
-        view instanceof baidu.base.BaseView && view.reload();
+        view instanceof rebar.mvc.BaseView && view.reload();
     });
 };
 
@@ -258,7 +258,7 @@ baidu.base.BaseView.prototype.reload = function () {
  * @return {Element}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomById = function (id) {
+rebar.mvc.BaseView.prototype.getDomById = function (id) {
     return this.getElement().querySelector('#' + this.getDomStr(id));
 };
 
@@ -272,9 +272,9 @@ baidu.base.BaseView.prototype.getDomById = function (id) {
  * @return {Element}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomByAttr = function (attr, val) {
+rebar.mvc.BaseView.prototype.getDomByAttr = function (attr, val) {
     return this.getElement().querySelector(
-        baidu.base.util.attrSelector(this.getDomStr(attr), val));
+        rebar.util.attrSelector(this.getDomStr(attr), val));
 };
 
 /**
@@ -285,8 +285,8 @@ baidu.base.BaseView.prototype.getDomByAttr = function (attr, val) {
  * @return {Element}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomByAttr2 = function (attr, val) {
-    return this.getElement().querySelector(baidu.base.util.attrSelector(attr, val));
+rebar.mvc.BaseView.prototype.getDomByAttr2 = function (attr, val) {
+    return this.getElement().querySelector(rebar.util.attrSelector(attr, val));
 };
 
 /**
@@ -298,9 +298,9 @@ baidu.base.BaseView.prototype.getDomByAttr2 = function (attr, val) {
  * @return {Element}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomByAttrInId = function (id, attr, optVal) {
+rebar.mvc.BaseView.prototype.getDomByAttrInId = function (id, attr, optVal) {
     var el = this.getDomById(id);
-    return el && el.querySelector(baidu.base.util.attrSelector(attr, optVal));
+    return el && el.querySelector(rebar.util.attrSelector(attr, optVal));
 };
 
 /**
@@ -312,9 +312,9 @@ baidu.base.BaseView.prototype.getDomByAttrInId = function (id, attr, optVal) {
  * @return {NodeList}
  * @protected
  */
-baidu.base.BaseView.prototype.getAllDomByAttr = function (attr, val) {
+rebar.mvc.BaseView.prototype.getAllDomByAttr = function (attr, val) {
     return this.getElement().querySelectorAll(
-        baidu.base.util.attrSelector(this.getDomStr(attr), val));
+        rebar.util.attrSelector(this.getDomStr(attr), val));
 };
 
 /**
@@ -325,8 +325,8 @@ baidu.base.BaseView.prototype.getAllDomByAttr = function (attr, val) {
  * @return {NodeList}
  * @protected
  */
-baidu.base.BaseView.prototype.getAllDomByAttr2 = function (attr, val) {
-    return this.getElement().querySelectorAll(baidu.base.util.attrSelector(attr, val));
+rebar.mvc.BaseView.prototype.getAllDomByAttr2 = function (attr, val) {
+    return this.getElement().querySelectorAll(rebar.util.attrSelector(attr, val));
 };
 
 /**
@@ -337,9 +337,9 @@ baidu.base.BaseView.prototype.getAllDomByAttr2 = function (attr, val) {
  * @return {NodeList}
  * @protected
  */
-baidu.base.BaseView.prototype.getAllDomByAttrInId = function (id, attr, optVal) {
+rebar.mvc.BaseView.prototype.getAllDomByAttrInId = function (id, attr, optVal) {
     var el = this.getDomById(id);
-    return el && el.querySelectorAll(baidu.base.util.attrSelector(attr, optVal));
+    return el && el.querySelectorAll(rebar.util.attrSelector(attr, optVal));
 };
 
 /**
@@ -354,7 +354,7 @@ baidu.base.BaseView.prototype.getAllDomByAttrInId = function (id, attr, optVal) 
  * @return {Element}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomByClass = function (cls) {
+rebar.mvc.BaseView.prototype.getDomByClass = function (cls) {
     return this.getElement().querySelector('.' + this.getDomStr(cls));
 };
 
@@ -366,7 +366,7 @@ baidu.base.BaseView.prototype.getDomByClass = function (cls) {
  * @return {NodeList}
  * @protected
  */
-baidu.base.BaseView.prototype.getAllDomByClass = function (cls) {
+rebar.mvc.BaseView.prototype.getAllDomByClass = function (cls) {
     return this.getElement().querySelectorAll('.' + this.getDomStr(cls));
 };
 
@@ -377,7 +377,7 @@ baidu.base.BaseView.prototype.getAllDomByClass = function (cls) {
  * @return {Element}
  * @protected
  */
-baidu.base.BaseView.prototype.getDomByTag = function (tagName) {
+rebar.mvc.BaseView.prototype.getDomByTag = function (tagName) {
     return this.getElement().querySelector(tagName);
 };
 
@@ -387,7 +387,7 @@ baidu.base.BaseView.prototype.getDomByTag = function (tagName) {
  * @return {NodeList}
  * @protected
  */
-baidu.base.BaseView.prototype.getAllDomByTag = function (tagName) {
+rebar.mvc.BaseView.prototype.getAllDomByTag = function (tagName) {
     return this.getElement().querySelectorAll(tagName);
 };
 
@@ -398,10 +398,10 @@ baidu.base.BaseView.prototype.getAllDomByTag = function (tagName) {
  *
  * @override
  */
-baidu.base.BaseView.prototype.createDom = function () {
+rebar.mvc.BaseView.prototype.createDom = function () {
     var dom = this.buildDom();
     if (goog.isString(dom)) {
-        dom = baidu.base.util.htmlToElement(dom);
+        dom = rebar.util.htmlToElement(dom);
     }
     this.setElementInternal(dom);
 };
@@ -413,7 +413,7 @@ baidu.base.BaseView.prototype.createDom = function () {
  * @return {string|Element}
  * @protected
  */
-baidu.base.BaseView.prototype.buildDom = function () {
+rebar.mvc.BaseView.prototype.buildDom = function () {
     return goog.dom.createElement(goog.dom.TagName.DIV);
 };
 
@@ -423,7 +423,7 @@ baidu.base.BaseView.prototype.buildDom = function () {
  *
  * @protected
  */
-baidu.base.BaseView.prototype.init = function () {
+rebar.mvc.BaseView.prototype.init = function () {
     if (this.viewInitialized_) {
         throw 'initialize a initialized view';
     }
@@ -437,7 +437,7 @@ baidu.base.BaseView.prototype.init = function () {
  * @return {boolean}
  * @protected
  */
-baidu.base.BaseView.prototype.isViewInitialized = function () {
+rebar.mvc.BaseView.prototype.isViewInitialized = function () {
     return this.viewInitialized_;
 };
 
@@ -448,19 +448,19 @@ baidu.base.BaseView.prototype.isViewInitialized = function () {
  *
  * @override
  */
-baidu.base.BaseView.prototype.enterDocument = function () {
+rebar.mvc.BaseView.prototype.enterDocument = function () {
     if (!this.isViewInitialized()) {
         this.init();
     }
-    baidu.base.BaseView.superClass_.enterDocument.call(this);
+    rebar.mvc.BaseView.superClass_.enterDocument.call(this);
     this.renderTooltips();
 };
 
 /**
  * @override
  */
-baidu.base.BaseView.prototype.exitDocument = function () {
-    baidu.base.BaseView.superClass_.exitDocument.call(this);
+rebar.mvc.BaseView.prototype.exitDocument = function () {
+    rebar.mvc.BaseView.superClass_.exitDocument.call(this);
     this.clearTooltips();
     this.clearSubscriptions();
 };
@@ -468,18 +468,18 @@ baidu.base.BaseView.prototype.exitDocument = function () {
 /**
  *@override
  */
-baidu.base.BaseView.prototype.disposeInternal = function () {
-    baidu.base.BaseView.superClass_.disposeInternal.call(this);
+rebar.mvc.BaseView.prototype.disposeInternal = function () {
+    rebar.mvc.BaseView.superClass_.disposeInternal.call(this);
     this.clearOverallSubscriptions();
 };
 
 /**
- * @see baidu.base.util.checkInput
+ * @see rebar.util.checkInput
  * 给一个dom元素（或者view对应的整个dom树）绑定输入校验检查。
  *
  * 如果覆盖了renderDomWithIdPrefix并返回true的时候，需要给
- * baidu.base.DomConst.AttrCheckerReg属性添加view id前缀，
- * baidu.base.util.checkInput里提到的其他属性不需要view id前缀。
+ * rebar.consts.DomConst.AttrCheckerReg属性添加view id前缀，
+ * rebar.util.checkInput里提到的其他属性不需要view id前缀。
  *
  * 该方法最常用的情况是在enterDocument的时候不带参数调用，这样就可以实现
  * view中所有设置了data-reg属性的元素的输入检查。
@@ -487,12 +487,12 @@ baidu.base.BaseView.prototype.disposeInternal = function () {
  * @param {Element=} optElement
  * @protected
  */
-baidu.base.BaseView.prototype.bindInputCheck = function (optElement) {
+rebar.mvc.BaseView.prototype.bindInputCheck = function (optElement) {
     var el = optElement || this.getElement();
     this.getHandler().listen(el, goog.events.EventType.KEYUP, function (event) {
-        var attr = this.getDomStr(baidu.base.DomConst.AttrCheckerReg);
+        var attr = this.getDomStr(rebar.consts.DomConst.AttrCheckerReg);
         if (event.target.hasAttribute(attr)) {
-            baidu.base.util.checkInput(
+            rebar.util.checkInput(
                 event.target, goog.bind(this.customInputChecker, this),
                 event.target.getAttribute(attr));
         }
@@ -503,12 +503,12 @@ baidu.base.BaseView.prototype.bindInputCheck = function (optElement) {
  * 删除某个element下的所有错误提示
  * @protected
  */
-baidu.base.BaseView.prototype.removeAllError = function () {
-    var selector = baidu.base.util.attrSelector(
-        this.getDomStr(baidu.base.DomConst.AttrCheckerReg));
+rebar.mvc.BaseView.prototype.removeAllError = function () {
+    var selector = rebar.util.attrSelector(
+        this.getDomStr(rebar.consts.DomConst.AttrCheckerReg));
     var elList = this.getElement().querySelectorAll(selector);
     goog.array.forEach(elList, function (el) {
-        baidu.base.util.removeError(el);
+        rebar.util.removeError(el);
     }, this);
 };
 
@@ -516,11 +516,11 @@ baidu.base.BaseView.prototype.removeAllError = function () {
  * @param {Function} acceptModel The model constructor.
  * @param {Element=} optElement The optional element,
  *     default is current element.
- * @return {baidu.base.BaseModel}
+ * @return {rebar.mvc.BaseModel}
  * @protected
  * @deprecated 请使用buildFormModel
  */
-baidu.base.BaseView.prototype.buildJQueryFormData = function (
+rebar.mvc.BaseView.prototype.buildJQueryFormData = function (
     acceptModel, optElement) {
     var jsonObj = this.buildFormData(null, optElement);
     var model = new acceptModel();
@@ -532,13 +532,13 @@ baidu.base.BaseView.prototype.buildJQueryFormData = function (
  * To build a model from from
  *
  * @param {Function} acceptModel The model constructor.
- * @param {baidu.base.BaseModel=} optInitModel The optional init model.
+ * @param {rebar.mvc.BaseModel=} optInitModel The optional init model.
  * @param {Element=} optElement The optional element,
  *     default is current element.
- * @return {baidu.base.BaseModel}
+ * @return {rebar.mvc.BaseModel}
  * @protected
  */
-baidu.base.BaseView.prototype.buildFormModel = function (
+rebar.mvc.BaseView.prototype.buildFormModel = function (
     acceptModel, optInitModel, optElement) {
     var initObj = null;
     if (optInitModel) {
@@ -559,7 +559,7 @@ baidu.base.BaseView.prototype.buildFormModel = function (
  * @return {Object}
  * @protected
  */
-baidu.base.BaseView.prototype.buildFormData = function (optInitObj, optElement) {
+rebar.mvc.BaseView.prototype.buildFormData = function (optInitObj, optElement) {
     var jsonObj = optInitObj || {};
     var elContent = optElement || this.getElement();
     var appendItem = function (name, val) {
@@ -604,7 +604,7 @@ baidu.base.BaseView.prototype.buildFormData = function (optInitObj, optElement) 
  *     default is current element.
  * @protected
  */
-baidu.base.BaseView.prototype.saveFormData = function (modelJson, optElement) {
+rebar.mvc.BaseView.prototype.saveFormData = function (modelJson, optElement) {
     var saveFormDataImpl = function (modelJson, optElement, optNamePrefix) {
         var namePrefix = optNamePrefix || '';
         var elContainer = optElement || this.getElement();
@@ -614,7 +614,7 @@ baidu.base.BaseView.prototype.saveFormData = function (modelJson, optElement) {
                 saveFormDataImpl.call(this, val, optElement, name + '.');
             }
             var el = elContainer.querySelector(
-                baidu.base.util.attrSelector('name', name));
+                rebar.util.attrSelector('name', name));
             if (el && el.type !== 'file') {
                 el.value = val;
                 if (goog.dom.classes.has(el, 'dropdown')) {
@@ -629,7 +629,7 @@ baidu.base.BaseView.prototype.saveFormData = function (modelJson, optElement) {
                     }
                 }
             } else if (this._inputsMap[name]) {
-                var input = /** @type {baidu.base.BaseInput} */(this._inputsMap[name]);
+                var input = /** @type {rebar.mvc.BaseInput} */(this._inputsMap[name]);
                 input.setValue(val);
             }
         }, this);
@@ -647,7 +647,7 @@ baidu.base.BaseView.prototype.saveFormData = function (modelJson, optElement) {
  * @return {boolean}
  * @protected
  */
-baidu.base.BaseView.prototype.customInputChecker = function (inputDom) {
+rebar.mvc.BaseView.prototype.customInputChecker = function (inputDom) {
     return true;
 };
 
@@ -659,17 +659,17 @@ baidu.base.BaseView.prototype.customInputChecker = function (inputDom) {
  * @return {boolean}
  * @protected
  */
-baidu.base.BaseView.prototype.checkAllInput = function (optElContent) {
+rebar.mvc.BaseView.prototype.checkAllInput = function (optElContent) {
     var pass = true;
-    var regAttr = this.getDomStr(baidu.base.DomConst.AttrCheckerReg);
-    var selector = baidu.base.util.attrSelector(regAttr);
+    var regAttr = this.getDomStr(rebar.consts.DomConst.AttrCheckerReg);
+    var selector = rebar.util.attrSelector(regAttr);
     var elements = (optElContent || this.getElement()).querySelectorAll(selector);
     for (var i = 0; i < elements.length; ++i) {
         if (!elements[i].offsetWidth && !elements[i].offsetHeight) {
             continue;  // 跳过隐藏的
         }
         var checker = goog.bind(this.customInputChecker, this);
-        var checkPassed = baidu.base.util.checkInput(
+        var checkPassed = rebar.util.checkInput(
             elements[i], checker, elements[i].getAttribute(regAttr));
         pass = checkPassed && pass;
     }
@@ -681,8 +681,8 @@ baidu.base.BaseView.prototype.checkAllInput = function (optElContent) {
  * @param {string} tip
  * @protected
  */
-baidu.base.BaseView.prototype.showTip = function (tip) {
-    baidu.base.MessageBox.getInstance().showTip(tip);
+rebar.mvc.BaseView.prototype.showTip = function (tip) {
+    rebar.util.MessageBox.getInstance().showTip(tip);
 };
 
 /**
@@ -693,7 +693,7 @@ baidu.base.BaseView.prototype.showTip = function (tip) {
  * @param {goog.ui.Tooltip} tooltip
  * @protected
  */
-baidu.base.BaseView.prototype.addTooltip = function (tooltip) {
+rebar.mvc.BaseView.prototype.addTooltip = function (tooltip) {
     this.tooltips_.push(tooltip);
 };
 
@@ -703,13 +703,13 @@ baidu.base.BaseView.prototype.addTooltip = function (tooltip) {
  *
  * @protected
  */
-baidu.base.BaseView.prototype.renderTooltips = function () {};
+rebar.mvc.BaseView.prototype.renderTooltips = function () {};
 
 /**
  * 清空所有的tooltip
  * @protected
  */
-baidu.base.BaseView.prototype.clearTooltips = function () {
+rebar.mvc.BaseView.prototype.clearTooltips = function () {
     for (var i = 0; i < this.tooltips_.length; ++i) {
         this.tooltips_[i].dispose();
     }
@@ -718,12 +718,12 @@ baidu.base.BaseView.prototype.clearTooltips = function () {
 
 /**
  * Add a input
- * @param {baidu.base.BaseInput} input The input
+ * @param {rebar.mvc.BaseInput} input The input
  * @param {string} name The name of the input
  * @param {Element=} optElContainer The container
  * @protected
  */
-baidu.base.BaseView.prototype.addInput = function (input, name, optElContainer) {
+rebar.mvc.BaseView.prototype.addInput = function (input, name, optElContainer) {
     if (this._inputsMap[name]) {
         return;
     }
@@ -734,9 +734,9 @@ baidu.base.BaseView.prototype.addInput = function (input, name, optElContainer) 
 /**
  * Get an input by name
  * @param {string} name The name of input.
- * @return {baidu.base.BaseInput?}
+ * @return {rebar.mvc.BaseInput?}
  */
-baidu.base.BaseView.prototype.getInput = function (name) {
+rebar.mvc.BaseView.prototype.getInput = function (name) {
     return this._inputsMap[name] || null;
 };
 
@@ -750,8 +750,8 @@ baidu.base.BaseView.prototype.getInput = function (name) {
  * @return {number} Subscription key
  * @protected
  */
-baidu.base.BaseView.prototype.subscribe = function (topic, fn, optContext) {
-    var key = baidu.base.pubSubInstance.subscribe(topic, fn, optContext || this);
+rebar.mvc.BaseView.prototype.subscribe = function (topic, fn, optContext) {
+    var key = rebar.consts.pubSubInstance.subscribe(topic, fn, optContext || this);
     this.subscriptionKeys_.push(key);
     return key;
 };
@@ -760,9 +760,9 @@ baidu.base.BaseView.prototype.subscribe = function (topic, fn, optContext) {
  * 取消订阅
  * @protected
  */
-baidu.base.BaseView.prototype.clearSubscriptions = function () {
+rebar.mvc.BaseView.prototype.clearSubscriptions = function () {
     for (var i = 0; i < this.subscriptionKeys_.length; ++i) {
-        baidu.base.pubSubInstance.unsubscribeByKey(this.subscriptionKeys_[i]);
+        rebar.consts.pubSubInstance.unsubscribeByKey(this.subscriptionKeys_[i]);
     }
     this.subscriptionKeys_ = [];
 };
@@ -770,7 +770,7 @@ baidu.base.BaseView.prototype.clearSubscriptions = function () {
 /**
  * BaseView提供subscription(订阅)的管理机制。父类统一管理subscription
  * 的key数组，在disposeInternal时全部取消订阅
- * 仿照baidu.base.BaseView.prototype.subscribe
+ * 仿照rebar.mvc.BaseView.prototype.subscribe
  *
  * @param {string} topic 订阅的话题
  * @param {Function} fn 处理函数
@@ -778,8 +778,8 @@ baidu.base.BaseView.prototype.clearSubscriptions = function () {
  * @return {number} Subscription key
  * @protected
  */
-baidu.base.BaseView.prototype.subscribeOverall = function (topic, fn, optContext) {
-    var key = baidu.base.pubSubInstance.subscribe(topic, fn, optContext || this);
+rebar.mvc.BaseView.prototype.subscribeOverall = function (topic, fn, optContext) {
+    var key = rebar.consts.pubSubInstance.subscribe(topic, fn, optContext || this);
     this.subscriptionOverallKeys_.push(key);
     return key;
 };
@@ -788,9 +788,9 @@ baidu.base.BaseView.prototype.subscribeOverall = function (topic, fn, optContext
  * 取消订阅，在disposeInternal中调用
  * @protected
  */
-baidu.base.BaseView.prototype.clearOverallSubscriptions = function () {
+rebar.mvc.BaseView.prototype.clearOverallSubscriptions = function () {
     for (var i = 0; i < this.subscriptionOverallKeys_.length; ++i) {
-        baidu.base.pubSubInstance.unsubscribeByKey(this.subscriptionOverallKeys_[i]);
+        rebar.consts.pubSubInstance.unsubscribeByKey(this.subscriptionOverallKeys_[i]);
     }
     this.subscriptionOverallKeys_ = [];
 };
@@ -799,7 +799,7 @@ baidu.base.BaseView.prototype.clearOverallSubscriptions = function () {
  * @param {boolean=} optRenderDomWithIdPrefix The optional param.
  * @constructor
  */
-baidu.base.BaseView.Settings = function (optRenderDomWithIdPrefix) {
+rebar.mvc.BaseView.Settings = function (optRenderDomWithIdPrefix) {
     /**
      * @type {boolean}
      */
@@ -810,5 +810,5 @@ baidu.base.BaseView.Settings = function (optRenderDomWithIdPrefix) {
  * @type {number}
  * @private
  */
-baidu.base.BaseView.idCounter_ = 0;
+rebar.mvc.BaseView.idCounter_ = 0;
 

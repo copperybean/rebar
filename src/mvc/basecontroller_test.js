@@ -3,11 +3,11 @@
  *
  * @author zhangzhihong02
  */
-goog.require('baidu.base.BaseController');
+goog.require('rebar.mvc.BaseController');
 
-describe('base-controller.js test suite', function () {
+describe('basecontroller.js test suite', function () {
     it('loadController function normal test', function () {
-        var controller = new baidu.base.BaseController();
+        var controller = new rebar.mvc.BaseController();
         expect(controller.isControllerLoaded()).toBeFalsy();
         spyOn(controller, 'initController');
         controller.loadController();
@@ -17,7 +17,7 @@ describe('base-controller.js test suite', function () {
     });
 
     it('unloadController function normal test', function () {
-        var controller = new baidu.base.BaseController();
+        var controller = new rebar.mvc.BaseController();
         expect(controller.unloadController).toThrow();
         controller.loadController();
         controller.unloadController();
@@ -26,7 +26,7 @@ describe('base-controller.js test suite', function () {
     });
 
     it('disposeInternal function normal test', function () {
-        var controller = new baidu.base.BaseController();
+        var controller = new rebar.mvc.BaseController();
         controller.loadController();
         spyOn(controller, 'unloadController');
         controller.disposeInternal();

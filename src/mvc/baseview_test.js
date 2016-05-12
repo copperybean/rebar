@@ -2,17 +2,17 @@
  * @fileoverview baseview.js的测试文件
  * @author zhangzhihong02
  */
-goog.require('baidu.base.BaseView');
+goog.require('rebar.mvc.BaseView');
 
-describe('base-view.js test suite', function () {
+describe('baseview.js test suite', function () {
     var TestView;
     var dom;
 
     beforeEach(function () {
         TestView = function () {
-            baidu.base.BaseView.call(this);
+            rebar.mvc.BaseView.call(this);
         };
-        goog.inherits(TestView, baidu.base.BaseView);
+        goog.inherits(TestView, rebar.mvc.BaseView);
 
         TestView.prototype.buildDom = function () {
             return $('<div id="' + TestView.DomId + '"></div>');

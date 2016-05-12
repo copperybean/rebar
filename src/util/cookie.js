@@ -2,7 +2,7 @@
  * @fileoverview 操作cookie的封装
  * @author hector<zzh-83@163.com>
  */
-goog.provide('baidu.base.cookie');
+goog.provide('rebar.util.cookie');
 
 goog.require('goog.crypt.base64');
 goog.require('goog.net.cookies');
@@ -12,7 +12,7 @@ goog.require('goog.net.cookies');
  * @param {string=} defaultVal
  * @return {string|undefined}
  */
-baidu.base.cookie.get = function (name, defaultVal) {
+rebar.util.cookie.get = function (name, defaultVal) {
     var ret = goog.net.cookies.get(name, defaultVal);
     if (ret) {
         return decodeURIComponent(ret);
@@ -30,12 +30,12 @@ baidu.base.cookie.get = function (name, defaultVal) {
  * @param {boolean=} secure
  * @return {boolean}
  */
-baidu.base.cookie.set = function (name, value, maxAge, path, domain, secure) {
+rebar.util.cookie.set = function (name, value, maxAge, path, domain, secure) {
     value = encodeURIComponent(value);
     if (value.length > goog.net.Cookies.MAX_COOKIE_LENGTH) {
         return false;
     }
-    path = baidu.base.cookie.defaultBasePath_ + (path || '');
+    path = rebar.util.cookie.defaultBasePath_ + (path || '');
     goog.net.cookies.set(name, value, maxAge, path, domain, secure);
     return true;
 };
@@ -43,12 +43,12 @@ baidu.base.cookie.set = function (name, value, maxAge, path, domain, secure) {
 /**
  * @param {string} path
  */
-baidu.base.cookie.setBasePath = function (path) {
-    baidu.base.cookie.defaultBasePath_ = path;
+rebar.util.cookie.setBasePath = function (path) {
+    rebar.util.cookie.defaultBasePath_ = path;
 };
 
 /**
  * @type {string}
  * @private
  */
-baidu.base.cookie.defaultBasePath_ = '';
+rebar.util.cookie.defaultBasePath_ = '';

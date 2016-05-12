@@ -5,16 +5,16 @@
  */
 goog.provide('rebar.ext.ztree.ZTreeWrapper');
 
-goog.require('baidu.base.BaseView');
+goog.require('rebar.mvc.BaseView');
 
 /**
  * @param {Array.<zTreeNodeModel>} nodes The ztree nodes.
  * @param {zTreeSettings} zTreeSettings The ztree settings.
  * @constructor
- * @extends {baidu.base.BaseView}
+ * @extends {rebar.mvc.BaseView}
  */
 rebar.ext.ztree.ZTreeWrapper = function (nodes, zTreeSettings) {
-    baidu.base.BaseView.call(this);
+    rebar.mvc.BaseView.call(this);
 
     /**
      * @type {Array.<zTreeNodeModel>}
@@ -58,7 +58,7 @@ rebar.ext.ztree.ZTreeWrapper = function (nodes, zTreeSettings) {
      */
     this.hiddenNodes_ = [];
 };
-goog.inherits(rebar.ext.ztree.ZTreeWrapper, baidu.base.BaseView);
+goog.inherits(rebar.ext.ztree.ZTreeWrapper, rebar.mvc.BaseView);
 
 /**
  * @param {string} queryText The search query

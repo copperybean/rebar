@@ -5,9 +5,9 @@
  */
 goog.provide('rebar.ext.jquery.AjaxFetcher');
 
-goog.require('baidu.base.ClosureDialog');
-goog.require('baidu.base.DialogInterface');
-goog.require('baidu.base.MessageBox');
+goog.require('rebar.dialog.ClosureDialog');
+goog.require('rebar.dialog.DialogInterface');
+goog.require('rebar.util.MessageBox');
 
 goog.require('goog.async.Delay');
 
@@ -103,7 +103,7 @@ rebar.ext.jquery.AjaxFetcher.prototype.ajax = function (options) {
         if (loadingDelay && loadingDelay.isActive()) {
             loadingDelay.stop();
         } else if (goog.isNumber(loadingId)) {
-            baidu.base.MessageBox.getInstance().hide(/** @type {number} */(loadingId));
+            rebar.util.MessageBox.getInstance().hide(/** @type {number} */(loadingId));
         }
 
         if (goog.isFunction(customCompleteFunc)) {
@@ -116,7 +116,7 @@ rebar.ext.jquery.AjaxFetcher.prototype.ajax = function (options) {
     }
     if (options.loadingInfo) {
         loadingDelay = new goog.async.Delay(function () {
-            loadingId = baidu.base.MessageBox.getInstance().showLoading(options.loadingInfo);
+            loadingId = rebar.util.MessageBox.getInstance().showLoading(options.loadingInfo);
         }, 500);
         loadingDelay.start();
     }
@@ -165,7 +165,7 @@ rebar.ext.jquery.AjaxFetcher.prototype.warn5XXError = function (responseText, op
 
 /**
  * @param {boolean=} optReset
- * @return {baidu.base.DialogInterface}
+ * @return {rebar.dialog.DialogInterface}
  * @protected
  */
 rebar.ext.jquery.AjaxFetcher.prototype.getErrorDialog = function (optReset) {
@@ -180,11 +180,11 @@ rebar.ext.jquery.AjaxFetcher.prototype.getErrorDialog = function (optReset) {
 
 /**
  * 生成错误对话框
- * @return {baidu.base.DialogInterface}
+ * @return {rebar.dialog.DialogInterface}
  * @protected
  */
 rebar.ext.jquery.AjaxFetcher.prototype.buildErrorDialog = function () {
-    return new baidu.base.ClosureDialog();
+    return new rebar.dialog.ClosureDialog();
 };
 
 /**
@@ -206,7 +206,7 @@ rebar.ext.jquery.AjaxFetcher.prototype.info_ = function (object) {
 };
 
 /**
- * @type {baidu.base.DialogInterface}
+ * @type {rebar.dialog.DialogInterface}
  * @private
  */
 rebar.ext.jquery.AjaxFetcher.errorDialog_ = null;

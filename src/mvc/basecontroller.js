@@ -2,9 +2,9 @@
  * @fileoverview 所有controller的基类
  * @author hector<zzh-83@163.com>
  */
-goog.provide('baidu.base.BaseController');
+goog.provide('rebar.mvc.BaseController');
 
-goog.require('baidu.base.Const');
+goog.require('rebar.consts');
 
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -15,7 +15,7 @@ goog.require('goog.events.EventTarget');
  * @constructor
  * @extends {goog.events.EventTarget}
  */
-baidu.base.BaseController = function () {
+rebar.mvc.BaseController = function () {
     goog.events.EventTarget.call(this);
 
     /**
@@ -36,12 +36,12 @@ baidu.base.BaseController = function () {
      */
     this.eventHandler_ = null;
 };
-goog.inherits(baidu.base.BaseController, goog.events.EventTarget);
+goog.inherits(rebar.mvc.BaseController, goog.events.EventTarget);
 
 /**
  * @return {boolean}
  */
-baidu.base.BaseController.prototype.isControllerLoaded = function () {
+rebar.mvc.BaseController.prototype.isControllerLoaded = function () {
     return this.isControllerLoaded_;
 };
 
@@ -49,7 +49,7 @@ baidu.base.BaseController.prototype.isControllerLoaded = function () {
  * @return {boolean}
  * @protected
  */
-baidu.base.BaseController.prototype.isControllerInitialized = function () {
+rebar.mvc.BaseController.prototype.isControllerInitialized = function () {
     return this.isControllerInitialized_;
 };
 
@@ -59,7 +59,7 @@ baidu.base.BaseController.prototype.isControllerInitialized = function () {
  * 子类可以覆盖该方法实现加载时的逻辑。
  * @protected
  */
-baidu.base.BaseController.prototype.loadController = function () {
+rebar.mvc.BaseController.prototype.loadController = function () {
     if (this.isControllerLoaded_) {
         throw 'load a loaded controller';
     }
@@ -75,7 +75,7 @@ baidu.base.BaseController.prototype.loadController = function () {
  * 子类只管覆盖该方法实现相应的刷新逻辑即可。
  * @protected
  */
-baidu.base.BaseController.prototype.reloadController = function () {
+rebar.mvc.BaseController.prototype.reloadController = function () {
     if (!this.isControllerLoaded_) {
         throw 'Reload a unloaded controller';
     }
@@ -85,7 +85,7 @@ baidu.base.BaseController.prototype.reloadController = function () {
  * Called when the controller unloaded
  * @protected
  */
-baidu.base.BaseController.prototype.unloadController = function () {
+rebar.mvc.BaseController.prototype.unloadController = function () {
     if (!this.isControllerLoaded_) {
         throw 'unload an unloaded controller';
     }
@@ -96,7 +96,7 @@ baidu.base.BaseController.prototype.unloadController = function () {
  * 实现初始化逻辑的地方，该方法应该被保证只调用一次。
  * @protected
  */
-baidu.base.BaseController.prototype.initController = function () {
+rebar.mvc.BaseController.prototype.initController = function () {
     if (this.isControllerInitialized_) {
         throw 'initialize the controller muliti time';
     }
@@ -106,7 +106,7 @@ baidu.base.BaseController.prototype.initController = function () {
 /**
  * @override
  */
-baidu.base.BaseController.prototype.disposeInternal = function () {
+rebar.mvc.BaseController.prototype.disposeInternal = function () {
     if (this.isControllerLoaded_) {
         this.unloadController();
     }
@@ -115,7 +115,7 @@ baidu.base.BaseController.prototype.disposeInternal = function () {
         this.eventHandler_.dispose();
         this.eventHandler_ = null;
     }
-    baidu.base.BaseController.superClass_.disposeInternal.call(this);
+    rebar.mvc.BaseController.superClass_.disposeInternal.call(this);
 };
 
 /**
@@ -125,7 +125,7 @@ baidu.base.BaseController.prototype.disposeInternal = function () {
  * @return {!goog.events.EventHandler} Event handler for this controller.
  * @protected
  */
-baidu.base.BaseController.prototype.getHandler = function () {
+rebar.mvc.BaseController.prototype.getHandler = function () {
     if (!this.eventHandler_) {
         this.eventHandler_ = new goog.events.EventHandler(this);
     }

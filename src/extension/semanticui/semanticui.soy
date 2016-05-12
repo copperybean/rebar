@@ -27,17 +27,17 @@
  */
 {template .pagination}
 <div class="ui pagination menu">
-  <a class="icon item" id="{$viewId}{baidu.base.pvdc.ID_PRE_PAGE}">
+  <a class="icon item" id="{$viewId}{rebar.views.pvdc.ID_PRE_PAGE}">
       上一页
   </a>
-  <a class="active item" id="{$viewId}{baidu.base.pvdc.ID_FIRST_PAGE}">1</a>
-  <div class="disabled item" id="{$viewId}{baidu.base.spvdc.ID_START_GAP}">...</div>
+  <a class="active item" id="{$viewId}{rebar.views.pvdc.ID_FIRST_PAGE}">1</a>
+  <div class="disabled item" id="{$viewId}{rebar.ext.sui.pvdc.ID_START_GAP}">...</div>
   {for $i in range($numShow)}
-  <a class="item" {baidu.base.pvdc.ATTR_PAGE_INDEX}="{$i}">{$i+1}</a>
+  <a class="item" {rebar.views.pvdc.ATTR_PAGE_INDEX}="{$i}">{$i+1}</a>
   {/for}
-  <div class="disabled item" id="{$viewId}{baidu.base.spvdc.ID_END_GAP}">...</div>
-  <a class="item" id="{$viewId}{baidu.base.pvdc.ID_LAST_PAGE}">1</a>
-  <a class="icon item" id="{$viewId}{baidu.base.pvdc.ID_NEXT_PAGE}">
+  <div class="disabled item" id="{$viewId}{rebar.ext.sui.pvdc.ID_END_GAP}">...</div>
+  <a class="item" id="{$viewId}{rebar.views.pvdc.ID_LAST_PAGE}">1</a>
+  <a class="icon item" id="{$viewId}{rebar.views.pvdc.ID_NEXT_PAGE}">
       下一页
   </a>
 </div>
@@ -51,7 +51,7 @@
     <div class="ui search"><div class="ui fluid input">
         <input class="prompt" type="text"/>
     </div></div>
-    <div id="{baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS}" style="padding:5px 0; line-height:2.5;"></div>
+    <div id="{rebar.consts.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS}" style="padding:5px 0; line-height:2.5;"></div>
 </div>
 {/template}
 

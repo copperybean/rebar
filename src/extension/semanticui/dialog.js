@@ -5,19 +5,19 @@
  */
 goog.provide('rebar.ext.sui.Dialog');
 
-goog.require('baidu.base.BaseView');
-goog.require('baidu.base.DialogInterface');
+goog.require('rebar.mvc.BaseView');
+goog.require('rebar.dialog.DialogInterface');
 goog.require('rebar.ext.sui.tpl');
 
 /**
  * constructor
  * @param {boolean=} optHideCloseIcon hide icon
  * @constructor
- * @extends {baidu.base.BaseView}
- * @implements {baidu.base.DialogInterface}
+ * @extends {rebar.mvc.BaseView}
+ * @implements {rebar.dialog.DialogInterface}
  */
 rebar.ext.sui.Dialog = function (optHideCloseIcon) {
-    baidu.base.BaseView.call(this);
+    rebar.mvc.BaseView.call(this);
 
     /**
      * @type {Function}
@@ -37,7 +37,7 @@ rebar.ext.sui.Dialog = function (optHideCloseIcon) {
      */
     this._hideCloseIcon = optHideCloseIcon;
 };
-goog.inherits(rebar.ext.sui.Dialog, baidu.base.BaseView);
+goog.inherits(rebar.ext.sui.Dialog, rebar.mvc.BaseView);
 
 /**
  * @param {string} msg The msg to show.
@@ -58,7 +58,7 @@ rebar.ext.sui.Dialog.prototype.setup = function (
     }
     this.getElement().querySelector('.header').innerHTML = title;
     var elContent = this.getElement().querySelector('.content');
-    if (content instanceof baidu.base.BaseView) {
+    if (content instanceof rebar.mvc.BaseView) {
         this.addSubView(content, elContent);
     } else {
         elContent.innerHTML = content;

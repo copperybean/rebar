@@ -5,14 +5,14 @@
  * @author zhangzhihong02
  */
 /* eslint-disable no-undef */
-goog.provide('baidu.base.Factory3rdParty');
+goog.provide('rebar.util.Factory3rdParty');
 
 /**
  * @param {jQuery} dom The dom.
  * @param {Object.<string, *>=} optOptions
  * @return ZeroClipboard
  */
-baidu.base.Factory3rdParty.createZeroClipbord = function (dom, optOptions) {
+rebar.util.Factory3rdParty.createZeroClipbord = function (dom, optOptions) {
     return new ZeroClipboard(dom, optOptions);
 };
 
@@ -21,6 +21,6 @@ baidu.base.Factory3rdParty.createZeroClipbord = function (dom, optOptions) {
  * @param {Object.<string, *>} options The arguments.
  * @return {CodeMirror}
  */
-baidu.base.Factory3rdParty.createCodeMirror = function (elTextArea, options) {
+rebar.util.Factory3rdParty.createCodeMirror = function (elTextArea, options) {
     return CodeMirror.fromTextArea(elTextArea, options);
 };

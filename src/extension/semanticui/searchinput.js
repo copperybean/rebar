@@ -5,9 +5,9 @@
  */
 goog.provide('rebar.ext.sui.SearchInput');
 
-goog.require('baidu.base.BaseInput');
-goog.require('baidu.base.Const');
-goog.require('baidu.base.MessageBox');
+goog.require('rebar.mvc.BaseInput');
+goog.require('rebar.consts');
+goog.require('rebar.util.MessageBox');
 
 goog.require('goog.array');
 goog.require('goog.dom');
@@ -18,10 +18,10 @@ goog.require('goog.dom.classes');
  * @param {string} urlPattern The url pattern
  * @param {string=} optDelimiter default is ';'
  * @constructor
- * @extends {baidu.base.BaseInput}
+ * @extends {rebar.mvc.BaseInput}
  */
 rebar.ext.sui.SearchInput = function (urlPattern, optDelimiter) {
-    baidu.base.BaseInput.call(this);
+    rebar.mvc.BaseInput.call(this);
 
     /**
      * @type {string}
@@ -47,7 +47,7 @@ rebar.ext.sui.SearchInput = function (urlPattern, optDelimiter) {
      */
     this._selectedItemsContainer = null;
 };
-goog.inherits(rebar.ext.sui.SearchInput, baidu.base.BaseInput);
+goog.inherits(rebar.ext.sui.SearchInput, rebar.mvc.BaseInput);
 
 /**
  * The selected items area can be more wide than input control, if you set a different container.
@@ -68,7 +68,7 @@ rebar.ext.sui.SearchInput.prototype.getValue = function () {
  * @override
  */
 rebar.ext.sui.SearchInput.prototype.setValue = function (val) {
-    this.getDomById(baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS).innerHTML = '';
+    this.getDomById(rebar.consts.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS).innerHTML = '';
     var items = val.split(this._delimiter);
     this._items = [];
     goog.array.forEach(items, function (itemVal) {
@@ -120,7 +120,7 @@ rebar.ext.sui.SearchInput.prototype._updateSelectedItemsWidth = function () {
     if (!this._selectedItemsContainer) {
         return;
     }
-    var elItems = this.getDomById(baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS);
+    var elItems = this.getDomById(rebar.consts.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS);
     var relativePos = goog.style.getRelativePosition(elItems, this._selectedItemsContainer);
     var widthDiff = goog.style.getSize(this._selectedItemsContainer).width
         - goog.style.getSize(elItems).width;
@@ -134,14 +134,14 @@ rebar.ext.sui.SearchInput.prototype._updateSelectedItemsWidth = function () {
  */
 rebar.ext.sui.SearchInput.prototype._addItem = function (item) {
     if (this._items.indexOf(item) >= 0) {
-        baidu.base.MessageBox.getInstance().showTip('不可重复选择');
+        rebar.util.MessageBox.getInstance().showTip('不可重复选择');
         return;
     }
     this._items.push(item);
-    var el = baidu.base.util.htmlToElement(rebar.ext.sui.tpl.searchInputItem({
+    var el = rebar.util.htmlToElement(rebar.ext.sui.tpl.searchInputItem({
         item: item
     }));
-    this.getDomById(baidu.base.Const.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS).appendChild(el);
+    this.getDomById(rebar.consts.DomConst.SEMANTICUI_SEARCHINPUT_ITEMS).appendChild(el);
 };
 
 /**
