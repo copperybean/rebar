@@ -1,0 +1,38 @@
+{namespace rebar.demo.template.JobInstancePage}
+
+/**
+ * The page html
+ * @param viewId
+ */
+{template .pageHtml}
+<div>
+  <div id="{$viewId}insinfo"></div>
+  <h3 class="page-header">hive log</h3>
+</div>
+{/template}
+
+/**
+ * The job instance html
+ * @param jobName
+ * @param startTimeDes
+ * @param endTimeDes
+ */
+{template .jobInstance}
+<div class="panel panel-default">
+  <div class="panel-heading">The job instance info</div>
+  <dl class="dl-horizontal panel-body">
+    <dt>Job name</dt><dd>{$jobName}</dd>
+    <dt>Start time</dt><dd>{$startTimeDes}</dd>
+    <dt>Finish time</dt><dd>{$endTimeDes}</dd>
+  </dl>
+</div>
+{/template}
+
+/**
+ * the log of hive job
+ * @param log
+ */
+{template .hiveJobLog}
+<pre class="log-shell">{$log}</pre>
+{/template}
+

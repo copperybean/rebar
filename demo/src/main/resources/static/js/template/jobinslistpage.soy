@@ -1,0 +1,41 @@
+{namespace rebar.demo.template.JobInsListPage}
+
+/**
+ * The job instances table
+ * @param instances
+ */
+{template .jobInstances}
+<table class="table table-hover">
+  <thead><tr>
+    <th>Name</th>
+    <th>Start Time</th>
+    <th>Finish Time</th>
+    <th>Operation</th>
+  </tr></thead>
+  <tbody>
+  {foreach $ins in $instances}
+  <tr jobinsid="{$ins.id}">
+    <td>{$ins.jobName}</td>
+    <td>{$ins.startTimeDes}</td>
+    <td>{$ins.endTimeDes}</td>
+    <td><div class="btn-group" role="group" aria-label="...">
+      <button type="button" class="btn btn-info">Detail</button>
+    </div></td>
+  </tr>
+  {/foreach}
+  </tbody>
+</table>
+{/template}
+
+/**
+ * @param name
+ * @param cronExpression
+ */
+{template .jobInfo}
+<p class="text-right">
+  <u>Instances of job:</u>{sp}
+  <strong>{$name}</strong>{sp}
+  <u>with cron expression:</u>{sp}
+  <strong>{$cronExpression}</strong>
+</p>
+{/template}

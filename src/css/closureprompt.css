@@ -1,0 +1,371 @@
+.rebar-closure-prompt-bg {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  background: #666;
+  opacity: .35;
+  border: none;
+}
+
+.rebar-closure-prompt {
+  position: absolute;
+  z-index: 9999;
+}
+
+.rebar-closure-prompt-modal {
+  font-size: 1rem;
+  /*border: none;*/
+  border-radius: .28571429rem;
+  text-align: left;
+  /*box-shadow: 1px 3px 3px 0 rgba(0, 0, 0, .2), 1px 3px 15px 2px rgba(0, 0, 0, .2);*/
+  -webkit-transform-origin: 50% 25%;
+  -ms-transform-origin: 50% 25%;
+  transform-origin: 50% 25%;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  will-change: margin, transform, opacity;
+}
+
+.rebar-closure-prompt-modal > .rebar-closure-prompt-header {
+  display: block;
+  font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  box-shadow: none;
+  color: rgba(0, 0, 0, .85);
+  border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.rebar-closure-prompt-modal > .rebar-closure-prompt-header:not(button) {
+  font-size: 1.42857143rem;
+  line-height: 1.2857em;
+  font-weight: 700;
+}
+
+.rebar-closure-prompt-modal.small {
+  min-width: 360px;
+  max-width: 720px;
+}
+
+.rebar-closure-prompt-modal.small > .rebar-closure-prompt-header:not(button) {
+  font-size: 1.3em;
+}
+
+.rebar-closure-prompt-modal.active {
+  display: block;
+}
+
+.rebar-closure-prompt-modal > .icon:first-child + * {
+  border-top-left-radius: .28571429rem;
+  border-top-right-radius: .28571429rem;
+}
+
+.rebar-closure-prompt-modal > :last-child {
+  border-bottom-left-radius: .28571429rem;
+  border-bottom-right-radius: .28571429rem;
+}
+
+.rebar-closure-prompt-modal .rebar-closure-prompt-header {
+  display: block;
+  font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  box-shadow: none;
+  color: rgba(0, 0, 0, .85);
+  border-bottom: 1px solid rgba(34, 36, 38, .15);
+}
+
+.rebar-closure-prompt-modal .rebar-cloure-prompt-content {
+  display: block;
+  font-size: 1em;
+  line-height: 1.4;
+  padding: 1.5rem;
+  background: #fff;
+}
+
+.rebar-closure-prompt-modal > .image.content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.rebar-closure-prompt-modal > .rebar-cloure-prompt-content > .image {
+  display: block;
+  width: "";
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  -webkit-align-self: top;
+  align-self: top;
+  -ms-flex-item-align: top;
+}
+
+.rebar-closure-prompt-modal > [class*="top aligned"] {
+  -webkit-align-self: top;
+  align-self: top;
+  -ms-flex-item-align: top;
+}
+
+.rebar-closure-prompt-modal > [class*="middle aligned"] {
+  -webkit-align-self: middle;
+  align-self: middle;
+  -ms-flex-item-align: middle;
+}
+
+.rebar-closure-prompt-modal > [class*="stretched"] {
+  -webkit-align-self: stretch;
+  align-self: stretch;
+  -ms-flex-item-align: stretch;
+}
+
+.rebar-closure-prompt-modal > .rebar-cloure-prompt-content > .description {
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 auto;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+  min-width: 0;
+  -webkit-align-self: top;
+  align-self: top;
+  -ms-flex-item-align: top;
+}
+
+.rebar-closure-prompt-modal > .rebar-cloure-prompt-content > .icon + .description,
+.rebar-closure-prompt-modal > .rebar-cloure-prompt-content > .image + .description {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  min-width: "";
+  width: auto;
+  padding-left: 2em;
+}
+
+.rebar-closure-prompt-modal button {
+  cursor: pointer;
+  display: inline-block;
+  min-height: 1em;
+  outline: none;
+  border: none;
+  vertical-align: baseline;
+  background: #e0e1e2 none;
+  color: rgba(0, 0, 0, .6);
+  font-family: "Lato", "Helvetica Neue", Arial, Helvetica, sans-serif;
+  margin: 0 .25em 0 0;
+  padding: .78571429em 1.5em .78571429em;
+  text-transform: none;
+  text-shadow: none;
+  font-weight: 700;
+  line-height: 1em;
+  font-style: normal;
+  text-align: center;
+  text-decoration: none;
+  border-radius: .28571429rem;
+  box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, .15) inset;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: opacity .1s ease, background-color .1s ease, color .1s ease, 
+  box-shadow .1s ease, background .1s ease;
+  transition: opacity .1s ease, background-color .1s ease, color .1s ease, 
+  box-shadow .1s ease, background .1s ease;
+  will-change: "";
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rebar-closure-prompt-modal button:hover {
+  background-color: #cacbcd;
+  background-image: none;
+  box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, .15) inset;
+  color: rgba(0, 0, 0, .8);
+}
+
+.rebar-closure-prompt-modal button:hover .icon {
+  opacity: .85;
+}
+
+.rebar-closure-prompt-modal button:focus {
+  background-color: #cacbcd;
+  color: rgba(0, 0, 0, .8);
+  background-image: "" !important;
+  box-shadow: "" !important;
+}
+
+.rebar-closure-prompt-modal button:focus .icon {
+  opacity: .85;
+}
+
+.rebar-closure-prompt-modal button:active,
+.rebar-closure-prompt-modal button.active:active {
+  background-color: #babbbc;
+  background-image: "";
+  color: rgba(0, 0, 0, .9);
+  box-shadow: 0 0 0 1px transparent inset, none;
+}
+
+.rebar-closure-prompt-modal button.active {
+  background-color: #c0c1c2;
+  background-image: none;
+  box-shadow: 0 0 0 1px transparent inset;
+  color: rgba(0, 0, 0, .95);
+}
+
+.rebar-closure-prompt-modal button.active:hover {
+  background-color: #c0c1c2;
+  background-image: none;
+  color: rgba(0, 0, 0, .95);
+}
+
+.rebar-closure-prompt-modal button.active:active {
+  background-color: #c0c1c2;
+  background-image: none;
+}
+
+.rebar-closure-prompt-modal .rebar-closure-prompt-buttons {
+  background: #f9fafb;
+  padding: 1rem 1rem;
+  border-top: 1px solid rgba(34, 36, 38, .15);
+  text-align: right;
+}
+
+.rebar-closure-prompt-modal .rebar-closure-prompt-buttons > button {
+  margin-left: .75em;
+}
+
+.rebar-closure-prompt-buttons.positive button,
+.rebar-closure-prompt-modal button.positive {
+  background-color: #21ba45 !important;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+.rebar-closure-prompt-modal button.positive {
+  box-shadow: 0 0 0 0 rgba(34, 36, 38, .15) inset;
+}
+
+.rebar-closure-prompt-buttons.positive button:hover,
+.rebar-closure-prompt-modal button.positive:hover {
+  background-color: #16ab39 !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.positive button:focus,
+.rebar-closure-prompt-modal button.positive:focus {
+  background-color: #0ea432 !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.positive button:active,
+.rebar-closure-prompt-modal button.positive:active {
+  background-color: #198f35 !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.positive button.active,
+.rebar-closure-prompt-modal button.positive.active,
+.rebar-closure-prompt-buttons.positive button.active:active {
+  background-color: #13ae38;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.negative button,
+.rebar-closure-prompt-modal button.negative {
+  background-color: #db2828 !important;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+.rebar-closure-prompt-modal button.negative {
+  box-shadow: 0 0 0 0 rgba(34, 36, 38, .15) inset;
+}
+
+.rebar-closure-prompt-buttons.negative button:hover,
+.rebar-closure-prompt-modal button.negative:hover {
+  background-color: #d01919 !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.negative button:focus,
+.rebar-closure-prompt-modal button.negative:focus {
+  background-color: #ca1010 !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.negative button:active,
+.rebar-closure-prompt-modal button.negative:active {
+  background-color: #b21e1e !important;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.negative button.active,
+.rebar-closure-prompt-modal button.negative.active,
+.rebar-closure-prompt-buttons.negative button.active:active {
+  background-color: #d41515;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.blue button,
+.rebar-closure-prompt-modal button.blue {
+  background-color: #2185d0;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+
+.rebar-closure-prompt-modal button.blue {
+  box-shadow: 0 0 0 0 rgba(34, 36, 38, .15) inset;
+}
+
+.rebar-closure-prompt-buttons.blue button:hover,
+.rebar-closure-prompt-modal button.blue:hover {
+  background-color: #1678c2;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.blue button:focus,
+.rebar-closure-prompt-modal button.blue:focus {
+  background-color: #0d71bb;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.blue button:active,
+.rebar-closure-prompt-modal button.blue:active {
+  background-color: #1a69a4;
+  color: #fff;
+  text-shadow: none;
+}
+
+.rebar-closure-prompt-buttons.blue button.active,
+.rebar-closure-prompt-buttons.blue button.active:active,
+.rebar-closure-prompt-modal button.blue.active,
+.rebar-closure-prompt-modal button.blue button.active:active {
+  background-color: #1279c6;
+  color: #fff;
+  text-shadow: none;
+}
+

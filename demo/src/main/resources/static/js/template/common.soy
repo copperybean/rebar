@@ -1,0 +1,30 @@
+{namespace rebar.demo.template.common}
+
+/**
+ * The bootstrap dialog
+ * @param title
+ * @param content
+ * @param cancelBtn
+ * @param yesBtn
+ */
+{template .bootstrapDialog}
+<div class="modal fade bs-modal-sm" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{$title}</h4>
+      </div>
+      <div class="modal-body">{$content}</div>
+      <div class="modal-footer">
+        {if $cancelBtn == true}
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        {/if}
+        {if $yesBtn == true}
+        <button type="button" class="btn btn-primary" data-btn="yes">OK</button>
+        {/if}
+      </div>
+    </div>
+  </div>
+</div>
+{/template}

@@ -1,0 +1,20 @@
+Query ID = root_20160316090202_55b1c49c-8147-4b5c-8416-20676beb2a04  
+Total jobs = 1  
+Launching Job 1 out of 1  
+Number of reduce tasks determined at compile time: 1  
+In order to change the average load for a reducer (in bytes):  
+  set hive.exec.reducers.bytes.per.reducer=<number>  
+In order to limit the maximum number of reducers:  
+  set hive.exec.reducers.max=<number>  
+In order to set a constant number of reducers:  
+  set mapreduce.job.reduces=<number>  
+Starting Job = job_1458103760977_0005, Tracking URL = http://yarn-training:8088/proxy/application_1458103760977_0005/  
+Kill Command = /opt/mapr/bin/hadoop job  -kill job_1458103760977_0005  
+Hadoop job information for Stage-1: number of mappers: 0; number of reducers: 0  
+2016-03-16 09:16:02,147 Stage-1 map = 0%,  reduce = 0%  
+Ended Job = job_1458103760977_0005 with errors  
+Error during job, obtaining debugging information...  
+FAILED: Execution Error, return code 2 from org.apache.hadoop.hive.ql.exec.mr.MapRedTask  
+MapReduce Jobs Launched:  
+Stage-Stage-1:  MAPRFS Read: 0 MAPRFS Write: 0 FAIL  
+Total MapReduce CPU Time Spent: 0 msec  

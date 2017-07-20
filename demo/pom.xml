@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.rebar</groupId>
+    <artifactId>rebar-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>rebar-demo-big-schedule</name>
+    <organization>
+        <name>Baidu</name>
+        <url>http://www.baidu.com</url>
+    </organization>
+    <description>a project for rebar javaserver demo</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <maven-surefire-plugin.skip>false</maven-surefire-plugin.skip>
+        <cobertura.maxmem>256M</cobertura.maxmem>
+        <closure.compiler>${com.google.javascript:closure-compiler:jar}</closure.compiler>
+        <closure.caldeps.path></closure.caldeps.path>
+        <current-profile>release</current-profile>
+        <closure-library.path>${project.basedir}/../../closure-library</closure-library.path>
+        <generate-js-source.mode></generate-js-source.mode>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+            <version>v20170124</version>
+        </dependency>
+
+        <!-- spring boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>static/js/**</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <warSourceExcludes>WEB-INF/classes/static/js/**,WEB-INF/jsp/index_*.jsp</warSourceExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>copy-files</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <filter token="jsname" value="${project.name}"/>
+                                <filter token="buildtime" value="${maven.build.timestamp}"/>
+                                <copy file="${project.basedir}/src/main/webapp/WEB-INF/jsp/index_${current-profile}.jsp"
+                                    tofile="${project.build.directory}/${project.name}/WEB-INF/jsp/index.jsp" filtering="true" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-model</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="begin to build js model from java..." />
+                                <exec executable="java" failOnError="true">
+                                    <arg line="-cp ${project.build.outputDirectory}/:${project.basedir}/../tool/jsmodel-builder/target/jsmodel-builder-1.0-jar-with-dependencies.jar" />
+                                    <arg line="org.rebar.tools.JSModelBuilder" />
+                                    <arg line="--javaPackage org.rebar.demo.model" />
+                                    <arg line="--jsNS rebar.demo.model.java" />
+                                    <arg line="--jsTargetPath ${js.intermediate.directory}model/java" />
+                                    <arg line="--jsReferClassMap ${project.basedir}/conf/js-refer-class-map" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate js file</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="generating js source files..." />
+                                <exec executable="python" failOnError="true">
+                                    <arg line="${project.basedir}/src/main/python/generate-js-source.py" />
+                                    <arg line="-t ${js.intermediate.directory}" />
+                                    <arg line="-s ${project.basedir}/src/main/resources/static/js/ -m . --nsprefix rebar.demo" />
+                                    <arg line="-s ${project.basedir}/../src -m rebar --nsprefix rebar" />
+                                    <arg line="-s ${closure-library.path}/closure/goog -m closure-library/closure/goog --nsprefix goog" />
+                                    <arg line="-s ${closure-library.path}/third_party/closure/goog -m closure-library/third_party/closure/goog --nsprefix goog" />
+                                    <arg line="${generate-js-source.mode}" />
+                                    <arg line="--webserverpath /js/" />
+                                    <arg line="--caldeps '${closure.caldeps.path}'" />
+                                    <arg line="--soycompilerjar" />
+                                    <arg line="${project.basedir}/../tool/soy-builder/target/soy-builder-1.0-jar-with-dependencies.jar"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <js.intermediate.directory>${project.build.directory}/generated-sources/js/</js.intermediate.directory>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>compile js</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo message="compiling js by closure compiler..." />
+                                        <exec executable="java" failOnError="true">
+                                            <arg value="-jar" />
+                                            <arg value="${closure.compiler}" />
+                                            <arg value="--js_output_file=${project.build.directory}/${project.name}/WEB-INF/classes/static/js/${project.name}.js" />
+                                            <arg value="--output_wrapper=&quot;(function(){%output%})();&quot;" />
+                                            <arg value="--compilation_level=ADVANCED_OPTIMIZATIONS" />
+                                            <arg value="--warning_level=VERBOSE" />
+                                            <arg value="--jscomp_off=fileoverviewTags" />
+                                            <!-- make almost all warnings to be errors -->
+                                            <arg value="--jscomp_error=accessControls" />
+                                            <arg value="--jscomp_error=ambiguousFunctionDecl" />
+                                            <arg value="--jscomp_error=checkEventfulObjectDisposal" />
+                                            <arg value="--jscomp_error=checkRegExp" />
+                                            <arg value="--jscomp_error=checkTypes" />
+                                            <arg value="--jscomp_error=checkVars" />
+                                            <arg value="--jscomp_error=const" />
+                                            <arg value="--jscomp_error=constantProperty" />
+                                            <arg value="--jscomp_error=deprecated" />
+                                            <arg value="--jscomp_error=duplicateMessage" />
+                                            <arg value="--jscomp_error=es3" />
+                                            <arg value="--jscomp_error=es5Strict" />
+                                            <arg value="--jscomp_error=externsValidation" />
+                                            <arg value="--jscomp_error=fileoverviewTags" />
+                                            <arg value="--jscomp_error=globalThis" />
+                                            <arg value="--jscomp_error=internetExplorerChecks" />
+                                            <arg value="--jscomp_error=invalidCasts" />
+                                            <arg value="--jscomp_error=misplacedTypeAnnotation" />
+                                            <arg value="--jscomp_error=missingProperties" />
+                                            <arg value="--jscomp_error=missingProvide" />
+                                            <arg value="--jscomp_error=missingReturn" />
+                                            <arg value="--jscomp_error=nonStandardJsDocs" />
+                                            <!--<arg value="-&#8211;jscomp_error=reportUnknownTypes" />-->
+                                            <arg value="--jscomp_error=suspiciousCode" />
+                                            <arg value="--jscomp_error=strictModuleDepCheck" />
+                                            <arg value="--jscomp_error=typeInvalidation" />
+                                            <arg value="--jscomp_error=undefinedNames" />
+                                            <arg value="--jscomp_error=undefinedVars" />
+                                            <arg value="--jscomp_error=unknownDefines" />
+                                            <arg value="--jscomp_error=uselessCode" />
+                                            <arg value="--jscomp_error=visibility" />
+                                            <arg value="!${js.intermediate.directory}**_test.js" />
+                                            <arg value="${js.intermediate.directory}**.js" />
+                                            <arg value="--entry_point=goog:rebar.demo.Main" />
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>debug</id>
+            <properties>
+                <current-profile>debug</current-profile>
+                <js.intermediate.directory>${project.build.directory}/classes/static/js/</js.intermediate.directory>
+                <closure.caldeps.path>${closure-library.path}/closure/bin/calcdeps.py</closure.caldeps.path>
+                <generate-js-source.mode>-d</generate-js-source.mode>
+            </properties>
+            <build>
+                <directory>target-debug</directory>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

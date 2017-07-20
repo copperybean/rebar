@@ -1,0 +1,16 @@
+.index-page {
+  padding-top: 70px;
+  padding-bottom: 30px;
+}
+
+.log-shell {
+  min-height: 300px;
+  max-height: 500px;
+  overflow-y: scroll;
+  background-color: #000;
+  color: #90ee90;
+}
+
+.hql.form-control {
+  height: 300px;
+}

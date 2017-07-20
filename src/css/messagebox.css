@@ -1,0 +1,81 @@
+.rebar-msg-box {
+    position: fixed;
+    z-index: 20000;
+    width: auto;
+    padding-top: 2px;
+    height: 24px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.rebar-msg-box span {
+    background: #4b981d;
+    color: #fff;
+    z-index: 98;
+    border: 1px solid;
+    padding: 3px 14px 5px 14px;
+    border-radius: 3px;
+    font-family: "Helvetica Neue", "lucida Grande", "Verdana";
+    box-shadow: 2px 5px 5px #888;
+}
+
+.rebar-msg-box i {
+    font-style: normal;
+    vertical-align: middle;
+}
+
+/* pagination view start */
+.pageview-length {
+    float: left;
+}
+
+.pageview-info {
+    float: left;
+    margin-left: 20px;
+}
+
+.pageview-left-seperator {
+    float: left;
+    margin-left: 20px;
+}
+
+.pageview-page {
+    float: right;
+}
+
+.pageview-page a,
+.pageview-page input {
+    border: 1px solid #d3d3d3;
+    padding: 2px 5px;
+}
+
+.pageview-page a {
+    background: #e6e6e6;
+    color: #333 !important;
+}
+
+.pageview-page input {
+    height: 22px;
+    width: 40px;
+    text-align: right;
+}
+
+.pageview-page a:hover {
+    text-decoration: none;
+}
+
+.pageview-page span {
+    margin-left: 3px;
+}
+
+.pageview-page .first {
+    border-bottom-left-radius: 4px;
+}
+
+.pageview-page .pageview-active,
+.pageview-page .pageview-disable {
+    opacity: .35;
+    filter: Alpha(Opacity=35);
+}
+/* pagination view end */
+

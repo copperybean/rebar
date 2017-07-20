@@ -1,0 +1,26 @@
+{namespace rebar.demo.template.IndexPage}
+
+/**
+ * The page html
+ * @param viewId
+ */
+{template .pageHtml}
+<div class="index-page">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="javascript:void(0);">Big Scheduler</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav" id="{$viewId}navbar">
+          <li tabname="{rebar.demo.view.IndexPage.TabName.RUNNING_JOBS}" class="active"><a href="javascript:void(0);">Running Jobs</a></li>
+          <li tabname="{rebar.demo.view.IndexPage.TabName.JOB_LIST}"><a href="javascript:void(0);">Jobs List</a></li>
+          <li tabname="{rebar.demo.view.IndexPage.TabName.CREATE_JOB}"><a href="javascript:void(0)">Create Job</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right"></ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+  <div class="container" id="{$viewId}container"></div>
+</div>
+{/template}

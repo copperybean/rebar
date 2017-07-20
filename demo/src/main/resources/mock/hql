@@ -1,0 +1,19 @@
+select b.day, count(b.cuid), count(case when b.xiding_cnt>0 then b.cuid else null end) as xduv,
+        sum(b.click_pv) as fenfa, sum(b.click_main_pv) as clk, sum(b.disp_main_pv) as display,
+        sum(b.xiding_cnt) as xdpv, sum(b.refresh)  as refreshpv, sum(b.auto_refresh_cnt)  as autorefresh,
+        sum(b.mannual_refresh_cnt)  as autorefresh,
+        sum(b.pulldown_refresh_cnt) as xiala, sum(b.pullup_refresh_cnt) as shangla,
+        sum(b.bottomright_refresh_cnt), sum(b.remindmid_refresh_cnt) as zjtxrefresh,
+        sum(b.main_refresh_cnt), sum(b.error_refresh_cnt)
+from (
+    SELECT cuid
+    FROM test where day='{7 day before BASE_DAY}' and os='2' and soft_version ='1.0' and is_dau='1'
+    order by rand() limit 30000
+)a join (
+    SELECT day, cuid, click_pv, click_main_pv, disp_main_pv, app_dura, xiding_cnt,
+            (mannual_refresh_cnt+auto_refresh_cnt) as refresh,
+            auto_refresh_cnt, mannual_refresh_cnt, pulldown_refresh_cnt, pullup_refresh_cnt,
+            bottomright_refresh_cnt, remindmid_refresh_cnt, main_refresh_cnt, error_refresh_cnt
+    FROM test where day='{BASE_DAY}' and os='2' and is_dau='1'
+)b on a.cuid=b.cuid
+group by b.day
