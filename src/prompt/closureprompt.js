@@ -79,7 +79,7 @@ rebar.prompt.ClosurePrompt.prototype.setup = function (
     el.innerHTML = content;
   }
 
-  var elCancel = this.getElement().querySelector('#rebar-prompt-cancel');
+  var elCancel = this.getDomById_(rebar.view.cpdc.ID_CANCEL);
   if (optShowCancel === false) {
     goog.style.setElementShown(elCancel, false);
   } else {
@@ -89,14 +89,14 @@ rebar.prompt.ClosurePrompt.prototype.setup = function (
     goog.style.setElementShown(elCancel, true);
   }
 
-  var elYes = this.getElement().querySelector('#rebar-prompt-ok');
+  var elOK = this.getDomById_(rebar.view.cpdc.ID_OK);
   if (optShowYes === false) {
-    goog.style.setElementShown(elYes, false);
+    goog.style.setElementShown(elOK, false);
   } else {
     if (goog.isFunction(optShowYes)) {
       this.okOnceCallback_ = optShowYes;
     }
-    goog.style.setElementShown(elYes, true);
+    goog.style.setElementShown(elOK, true);
   }
   this.render();
   return this;
@@ -108,14 +108,14 @@ rebar.prompt.ClosurePrompt.prototype.setup = function (
 rebar.prompt.ClosurePrompt.prototype.enterDocument = function () {
   rebar.prompt.ClosurePrompt.superClass_.enterDocument.call(this);
 
-  var elYes = this.getElement().querySelector('#rebar-prompt-ok');
-  this.getHandler().listen(elYes, goog.events.EventType.CLICK, function () {
+  var elOK = this.getDomById_(rebar.view.cpdc.ID_OK);
+  this.getHandler().listen(elOK, goog.events.EventType.CLICK, function () {
     if (!this.okOnceCallback_ || this.okOnceCallback_.call(null) !== false) {
       this.setVisible(false);
     }
   });
 
-  var elCancel = this.getElement().querySelector('#rebar-prompt-cancel');
+  var elCancel = this.getDomById_(rebar.view.cpdc.ID_CANCEL);
   this.getHandler().listen(elCancel, goog.events.EventType.CLICK, function () {
     if (!this.cancelOnceCallback_ ||
         this.cancelOnceCallback_.call(null) !== false) {
@@ -129,7 +129,7 @@ rebar.prompt.ClosurePrompt.prototype.enterDocument = function () {
  */
 rebar.prompt.ClosurePrompt.prototype.show = function () {
   this.setVisible(true);
-  var elCancel = this.getElement().querySelector('#rebar-prompt-cancel');
+  var elCancel = this.getDomById_(rebar.view.cpdc.ID_CANCEL);
   elCancel.focus();
 };
 
@@ -174,4 +174,23 @@ rebar.prompt.ClosurePrompt.prototype.onHide = function () {
 rebar.prompt.ClosurePrompt.prototype.disposeInternal = function () {
   rebar.prompt.ClosurePrompt.superClass_.disposeInternal.call(this);
 };
+
+/**
+ * To get Element by id in this view
+ * @param {string} id The id suffix
+ * @return {Element}
+ * @private
+ */
+rebar.prompt.ClosurePrompt.prototype.getDomById_ = function (id) {
+  return this.getElement().querySelector('#' + this.getId() + id);
+};
+
+/**
+ * @enum {string}
+ */
+rebar.prompt.ClosurePrompt.DomConst = {
+  ID_CANCEL: 'rebar-prompt-cancel',
+  ID_OK: 'rebar-prompt-ok'
+};
+rebar.view.cpdc = rebar.prompt.ClosurePrompt.DomConst;
 

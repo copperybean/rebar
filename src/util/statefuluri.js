@@ -52,6 +52,9 @@ rebar.util.StatefulUri = function (statefulObj, optWindow) {
    * @private
    */
   this.window_ = optWindow || window;
+
+  goog.events.listen(ret, goog.history.EventType.NAVIGATE,
+      goog.bind(this.onNavigate_, this));
 };
 
 /**
@@ -104,8 +107,6 @@ rebar.util.StatefulUri.prototype.getHtml5History = function (optWindow) {
   var ret = new goog.history.Html5History(
       optWindow, new rebar.util.StatefulUri.TokenTransformer())
   ret.setUseFragment(false);
-  goog.events.listen(ret, goog.history.EventType.NAVIGATE,
-      goog.bind(this.onNavigate_, this));
   ret.setEnabled(true);
   return ret;
 };

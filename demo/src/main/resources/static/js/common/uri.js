@@ -88,12 +88,14 @@ rebar.demo.common.uri.saveHiveJob = function (optJobName) {
 
 /**
  * Generate a uri instance of this page
- *
  * @param {string} uriSuffix the suffix of uri
  * @return {goog.Uri}
  * @private
  */
 rebar.demo.common.uri.generateUri_ = function (uriSuffix) {
+  // some project may be used as a module of a big project, and may
+  // be accessed from a sub path. This can be configured globally and all
+  // rest uri will be modified.
   var basePath = '/';
   var uriPrefix =  goog.uri.utils.appendPath(basePath, uriSuffix);
   var uri = new goog.Uri(uriPrefix);
