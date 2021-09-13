@@ -1,7 +1,7 @@
 # rebar
 An mvc library based on [Closure Library](https://github.com/google/closure-library).
 
-Like its name, this library mainly concentrates on the framework when building a project with Closure Library. Users are suggested to browse the [demo source codes](https://github.com/copperybean/rebar/tree/master/demo/src/main/resources/static/js), especially [controller](https://github.com/copperybean/rebar/tree/master/demo/src/main/resources/static/js/controller) and [view](https://github.com/copperybean/rebar/tree/master/demo/src/main/resources/static/js/view), and visit the [demo page](http://104.154.173.69). If you are impatient to read following words, you can start you own project according to the demo now, I think it's really easy to understand the source codes.
+Like its name, this library mainly concentrates on the framework when building a project with Closure Library. Users are suggested to browse the [demo source codes](https://github.com/copperybean/rebar/tree/master/demo/src/main/resources/static/js) first, especially [controller](https://github.com/copperybean/rebar/tree/master/demo/src/main/resources/static/js/controller) and [view](https://github.com/copperybean/rebar/tree/master/demo/src/main/resources/static/js/view). If you are impatient to read following words, you can start you own project according to the demo now, I think it's really easy to understand the source codes.
 
 Closure library is an excellent library, rebar wants to provide following abilities when developing [SPA](https://en.wikipedia.org/wiki/Single-page_application) project based on Closure Library.
 1. An MVC system to manage pages and abstract interaction of related pages in SPA
